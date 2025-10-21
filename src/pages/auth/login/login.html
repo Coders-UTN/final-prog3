@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Iniciar Sesión - SuperFood</title>
+    
+    <link rel="stylesheet" href="./login.css"> 
+</head>
+<body>
+    <main>
+        <form class="formulario" id="login-form">
+            <h1 class="formulario_titulo">SuperFood</h1>
+            <h2 class="formulario__subtitulo">Iniciar Sesión</h2>
+            
+            <div class="formulario__contenedor">
+                
+                <div class="contenedor__input">
+                    <label for="email">Email:</label>
+                    <input type="email" class="formulario__input" id="email" name="email" required placeholder="ejemplo@correo.com" />
+                </div>
+
+                <div class="contenedor__input">
+                    <label for="password">Contraseña:</label>
+                    <input type="password" class="formulario__input" id="password" name="password" required placeholder="Ingresa tu contraseña" />
+                </div>
+
+                <p id="error-message" class="formulario__error"></p>
+
+                <button class="formulario__boton">Iniciar Sesión</button>
+                
+                <p class="formulario__texto">
+                    ¿No tienes cuenta? <a class="formulario__link" href="../register/register.html">Regístrate</a>
+                </p>
+            </div>
+        </form>
+    </main>
+
+    <script type="module" src="./login.ts"></script>
+</body>
+</html>
