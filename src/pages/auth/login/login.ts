@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error: any) {
             // si no: 
             console.error("Error de login:", error);
-            mensajeError.textContent = error.mensaje || "Error al iniciar sesión.";
+            mensajeError.textContent = error.message // "Error al iniciar sesión.";
             mensajeError.style.color = 'red';
         }
     });
