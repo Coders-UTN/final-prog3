@@ -6,12 +6,15 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        // Esta es tu página principal
+        // Esta es tu página principal (asumiendo que está en la raíz)
         main: resolve(__dirname, 'index.html'),
 
-        // Aquí le dices a Vite dónde están tus otras páginas HTML
-        login: resolve(__dirname, 'pages/auth/login/login.html'),
-        register: resolve(__dirname, 'pages/auth/register/register.html'),
+        // Aquí le decimos a Vite dónde están tus otras páginas HTML
+        // ✅ RUTA CORREGIDA (agregamos 'src/')
+        login: resolve(__dirname, 'src/pages/auth/login/login.html'),
+        
+        // ✅ RUTA CORREGIDA (agregamos 'src/')
+        register: resolve(__dirname, 'src/pages/auth/register/register.html'),
         
         // ...puedes añadir más páginas aquí si las tienes
       },

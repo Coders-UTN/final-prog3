@@ -9,7 +9,7 @@
 </head>
 <body>
     <main>
-        <form class="formulario">
+        <form class="formulario" id="login-form">
             <h1 class="formulario_titulo">SuperFood</h1>
             <h2 class="formulario__subtitulo">Iniciar Sesión</h2>
             
@@ -25,6 +25,8 @@
                     <input type="password" class="formulario__input" id="password" name="password" required placeholder="Ingresa tu contraseña" />
                 </div>
 
+                <p id="error-message" class="formulario__error"></p>
+
                 <button class="formulario__boton">Iniciar Sesión</button>
                 
                 <p class="formulario__texto">
@@ -33,5 +35,7 @@
             </div>
         </form>
     </main>
+
+    <script type="module" src="./login.ts"></script>
 </body>
 </html>
