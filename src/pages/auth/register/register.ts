@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Error si algun campo unico se ya esta registrado.
             console.error("Error de registro:", error);
-            mensajeError.textContent = error.mensaje || "Error al registrarse.";
+            mensajeError.textContent = error.message || "Error al registrarse.";
             mensajeError.style.color = 'red';
         }
     });
