@@ -65,8 +65,7 @@ body {
 .contenedor__input{
     display: flex;
     flex-direction: column;
-    margin: 10px 0px;
-
+    margin: 5px 0px;
 }
 
 .formulario__input{
