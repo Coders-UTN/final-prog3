@@ -1,4 +1,5 @@
 import { type IUser } from "../types/IUser";
+import type { IUserData } from "../types/IUserData";
 
 // La URL base de tu backend Spring Boot
 const API_URL = "http://localhost:8080/api/auth";
@@ -7,7 +8,7 @@ const API_URL = "http://localhost:8080/api/auth";
  * Registra un nuevo usuario.
  * 'userData' es un objeto con los datos del formulario de registro.
  */
-export const register = async (userData: any): Promise<IUser> => {
+export const register = async (userData: IUserData): Promise<IUser> => {
     const response = await fetch(`${API_URL}/register`, {
         method: 'POST',
         headers: {

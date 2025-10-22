@@ -1,4 +1,5 @@
 
+import type { IUserData } from "../../../types/IUserData";
 import { register } from "../../../utils/auth";
 import { saveUser } from "../../../utils/localStorage"; 
 import { navigateTo } from "../../../utils/navigate";     
@@ -31,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         mensajeError.textContent = ''
 
         // Crea el objeto con los datos del usuario
-        const userData = {
+        const userData: IUserData = {
             nombre: nombreInput.value,
             apellido: apellidoInput.value,
             email: emailInput.value,
