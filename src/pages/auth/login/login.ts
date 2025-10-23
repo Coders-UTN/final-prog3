@@ -36,11 +36,11 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Inicio de sesión exitoso:", loggedInUser);
             saveUser(loggedInUser); 
             
-            mensajeError.textContent = `¡Bienvenido, ${loggedInUser.nombre}!`;
+            mensajeError.textContent = `¡Bienvenido, ${loggedInUser.usuarioDTO.nombre}!`;
             mensajeError.style.color = 'green';
 
             setTimeout(() => {
-                navigateTo('/client/home/home.html'); 
+                navigateTo('/src/pages/store/home/home.html'); 
             }, 1500); 
 
         } catch (error: any) {

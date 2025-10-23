@@ -1,4 +1,5 @@
 
+import type { AuthResponse } from "../../../types/IAuthResponse";
 import type { IUserData } from "../../../types/IUserData";
 import { register } from "../../../utils/auth";
 import { saveUser } from "../../../utils/localStorage"; 
@@ -14,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const apellidoInput = document.getElementById('apellido') as HTMLInputElement;
     const emailInput = document.getElementById('email') as HTMLInputElement;
     const passwordInput = document.getElementById('password') as HTMLInputElement;
+    const telefonoInput = document.getElementById('telefono') as HTMLInputElement;
     const passwordVerify = document.getElementById('password-verify') as HTMLInputElement;
     const mensajeError = document.getElementById('error-message') as HTMLParagraphElement;
     const mostrarContrasena = document.getElementById('mostrar-contrasena') as HTMLInputElement;
@@ -31,8 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
             nombre: nombreInput.value,
             apellido: apellidoInput.value,
             email: emailInput.value,
+            telefono: telefonoInput.value,
             password: passwordInput.value
-            
         };
 
         if (passwordInput.value != passwordVerify.value){
@@ -47,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             
-            const registrarUsuario = await register(userData);
+            const registrarUsuario: AuthResponse = await register(userData);
 
             // Registro exitoso
             console.log("Usuario registrado:", registrarUsuario);
@@ -55,12 +57,12 @@ document.addEventListener('DOMContentLoaded', () => {
             //Auto-login. (Esto no se si iria  Podriamos hacer que redireccione al login)
             saveUser(registrarUsuario); 
 
-            mensajeError.textContent = `Bienvenido, ${registrarUsuario.nombre}, serás redireccionado al login...`;
+            mensajeError.textContent = `Registro exitoso! Bienvenid@, ${registrarUsuario.usuarioDTO.nombre}`;
             mensajeError.style.color = 'green';
 
-            // Luego de 2 segundos te manda al login
+            // Luego de 2 segundos te manda al home
             setTimeout(() => {
-                navigateTo('/auth/login/login.html'); 
+                navigateTo('/src/pages/store/home/home.html'); 
             }, 2000);
 
         } catch (error: any) {
