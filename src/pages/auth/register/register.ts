@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const apellidoInput = document.getElementById('apellido') as HTMLInputElement;
     const emailInput = document.getElementById('email') as HTMLInputElement;
     const passwordInput = document.getElementById('password') as HTMLInputElement;
+    const telefonoInput = document.getElementById('telefono') as HTMLInputElement;
     const passwordVerify = document.getElementById('password-verify') as HTMLInputElement;
     const mensajeError = document.getElementById('error-message') as HTMLParagraphElement;
     const mostrarContrasena = document.getElementById('mostrar-contrasena') as HTMLInputElement;
@@ -31,8 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
             nombre: nombreInput.value,
             apellido: apellidoInput.value,
             email: emailInput.value,
+            telefono: telefonoInput.value,
             password: passwordInput.value
-            
         };
 
         if (passwordInput.value != passwordVerify.value){
