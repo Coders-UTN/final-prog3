@@ -1,4 +1,5 @@
 // Importamos el 'type' para que TypeScript sepa qué guardamos
+import type { AuthResponse } from "../types/IAuthResponse";
 import { type IUser } from "../types/IUser";
 
 // Definimos una clave constante para usar en localStorage
@@ -8,11 +9,11 @@ const USER_KEY = "food_store_user";
  * Guarda el objeto del usuario en localStorage.
  * Esta es la función que tu login.ts necesita.
  */
-export const saveUser = (user: IUser) => {
+export const saveUser = (AuthResponse: AuthResponse) => {
     try {
         // localStorage solo guarda strings,
         // así que convertimos el objeto a un string JSON.
-        window.localStorage.setItem(USER_KEY, JSON.stringify(user));
+        window.localStorage.setItem(USER_KEY, JSON.stringify(AuthResponse.token));
     } catch (error) {
         console.error("Error al guardar el usuario:", error);
     }
