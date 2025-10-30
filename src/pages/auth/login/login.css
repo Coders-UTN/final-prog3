@@ -44,7 +44,7 @@ body {
     align-items: center;
     justify-content: space-around;
     border-radius: 20px;
-        box-shadow: 4px 4px 6px grey;
+    box-shadow: 4px 4px 6px grey;
 }
 
 .formulario_titulo{
@@ -58,14 +58,14 @@ body {
 .formulario__contenedor{
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: center;
     height: 70%;
 }
 
 .contenedor__input{
     display: flex;
     flex-direction: column;
-
+    margin: 5px 0px;
 }
 
 .formulario__input{
@@ -74,6 +74,7 @@ body {
     border-radius: 5px;
     border: solid gray 1px;
     text-indent: 10px;
+    margin-bottom: 10px;
 }
 
 .formulario__boton{
@@ -83,6 +84,8 @@ body {
     border-radius: 10px;
     color: var(--light);
     font-weight: bold;
+    margin-top:2rem;
+    margin-bottom: 1rem;
 }
 
 .formulario__boton:hover{

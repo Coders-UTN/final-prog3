@@ -1,4 +1,5 @@
 
+import type { IUserData } from "../../../types/IUserData";
 import { register } from "../../../utils/auth";
 import { saveUser } from "../../../utils/localStorage"; 
 import { navigateTo } from "../../../utils/navigate";     
@@ -9,21 +10,17 @@ document.addEventListener('DOMContentLoaded', () => {
     
     
     const registerForm = document.getElementById('register-form') as HTMLFormElement;
-    
     const nombreInput = document.getElementById('nombre') as HTMLInputElement;
-    
     const apellidoInput = document.getElementById('apellido') as HTMLInputElement;
-    
     const emailInput = document.getElementById('email') as HTMLInputElement;
-    
-    const celularInput = document.getElementById('celular') as HTMLInputElement;
-    
     const passwordInput = document.getElementById('password') as HTMLInputElement;
-    
-    // Elemento errores
+    const telefonoInput = document.getElementById('telefono') as HTMLInputElement;
+    const passwordVerify = document.getElementById('password-verify') as HTMLInputElement;
     const mensajeError = document.getElementById('error-message') as HTMLParagraphElement;
+    const mostrarContrasena = document.getElementById('mostrar-contrasena') as HTMLInputElement;
 
-    // Conectarse al evento 'submit'
+    mostrarContrasena.checked = false;
+
     registerForm.addEventListener('submit', async (event) => {
         
         // Para evitar recargue y que este limpio
@@ -31,14 +28,23 @@ document.addEventListener('DOMContentLoaded', () => {
         mensajeError.textContent = ''
 
         // Crea el objeto con los datos del usuario
-        const userData = {
+        const userData: IUserData = {
             nombre: nombreInput.value,
             apellido: apellidoInput.value,
             email: emailInput.value,
-            celular: parseInt(celularInput.value, 10), 
+            telefono: telefonoInput.value,
             password: passwordInput.value
-            
         };
+
+        if (passwordInput.value != passwordVerify.value){
+            mensajeError.textContent = "Las contraseñas no coinciden";
+            return;
+        }
+
+        if (passwordInput.value.length < 6 ){
+            mensajeError.textContent = "La contraseña debe tener al menos 6 caracteres";
+            return;
+        }
 
         try {
             
@@ -50,12 +56,12 @@ document.addEventListener('DOMContentLoaded', () => {
             //Auto-login. (Esto no se si iria  Podriamos hacer que redireccione al login)
             saveUser(registrarUsuario); 
 
-            mensajeError.textContent = `¡Registro exitoso! Bienvenido, ${registrarUsuario.nombre}.`;
+            mensajeError.textContent = `Bienvenido, ${registrarUsuario.nombre}, serás redireccionado al login...`;
             mensajeError.style.color = 'green';
 
-            // Luego de 2 segundos te manda al inicio
+            // Luego de 2 segundos te manda al login
             setTimeout(() => {
-                navigateTo('/client/home/home.html'); 
+                navigateTo('/auth/login/login.html'); 
             }, 2000);
 
         } catch (error: any) {
@@ -63,7 +69,13 @@ document.addEventListener('DOMContentLoaded', () => {
             // Error si algun campo unico se ya esta registrado.
             console.error("Error de registro:", error);
             mensajeError.textContent = error.message || "Error al registrarse.";
-            mensajeError.style.color = 'red';
         }
     });
+
+    mostrarContrasena.addEventListener('change', () => {
+       const tipo: string =  mostrarContrasena.checked ? 'text' : 'password';
+
+       passwordInput.type = tipo;
+       passwordVerify.type = tipo;
+    })
 });
