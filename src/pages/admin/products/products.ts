@@ -1,8 +1,7 @@
-// --- 1. URLs y Estructuras de Datos ---
 const API_BASE_URL_PRODUCTOS = 'http://localhost:8080/api/productos';
 const API_BASE_URL_CATEGORIAS = 'http://localhost:8080/api/categorias';
 
-interface Categoria { // Se mantiene, ya que los Productos la usan
+interface Categoria {
     id: number;
     nombre: string;
 }
@@ -14,37 +13,39 @@ interface Producto {
     descripcion: string;
     precio: number; 
     stock: number;
-    categoriaId: number; 
+    categoriaid: number; 
     categoriaNombre?: string; 
 }
 
-// --- 2. Clase Principal ComponenteProductos (CORREGIDO) ---
 class ComponenteProductos {
-    productos: Producto[] = []; // Array de productos
+    productos: Producto[] = []; 
     categoriasDisponibles: Categoria[] = [];
 
     modal: HTMLElement | null;
     formulario: HTMLFormElement | null;
     tablaCuerpo: HTMLElement | null;
     
+    private idEnEdicion: number | null = null;
+    private submitHandler: (e: Event) => void;
+    
     constructor() {
         console.log('Componente de Productos cargado.');
-        this.modal = document.getElementById('modal-producto'); // ID CORREGIDO en el HTML
-        this.formulario = document.getElementById('formulario-producto') as HTMLFormElement; // ID CORREGIDO en el HTML
+        this.modal = document.getElementById('modal-producto'); 
+        this.formulario = document.getElementById('formulario-producto') as HTMLFormElement; 
         this.tablaCuerpo = document.querySelector('.tarjeta table tbody');
 
+        this.submitHandler = this.manejarSubmitGlobal.bind(this);
+        
         this.inicializarApp();
-        this.adjuntarEventos();
+        this.adjuntarEventosBase();
     }
     
-    // --- LÓGICA DE CARGA DE DATOS ---
     async inicializarApp(): Promise<void> {
         await this.cargarCategoriasParaDesplegable(); 
         await this.cargarProductos();
     }
     
     async cargarCategoriasParaDesplegable(): Promise<void> {
-        // ... (La lógica de carga de categorías se mantiene igual)
         try {
             const response = await fetch(API_BASE_URL_CATEGORIAS);
             if (!response.ok) {
@@ -57,7 +58,6 @@ class ComponenteProductos {
     }
 
     async cargarProductos(): Promise<void> {
-        // ... (La lógica de carga de productos se mantiene igual)
         try {
             const response = await fetch(API_BASE_URL_PRODUCTOS);
             if (!response.ok) {
@@ -67,10 +67,10 @@ class ComponenteProductos {
             const productosData: Producto[] = await response.json(); 
             
             this.productos = productosData.map(p => {
-                const cat = this.categoriasDisponibles.find(c => c.id === p.categoriaId);
+                const cat = this.categoriasDisponibles.find(c => c.id === p.categoriaid);
                 return {
                     ...p,
-                    categoriaNombre: cat ? cat.nombre : `ID: ${p.categoriaId}`
+                    categoriaNombre: cat ? cat.nombre : `ID: ${p.categoriaid}`
                 };
             });
             
@@ -81,7 +81,6 @@ class ComponenteProductos {
         }
     }
 
-    // --- MÉTODOS DE RENDERIZADO ---
     renderizarProductos(): void { 
         if (!this.tablaCuerpo) return;
         this.tablaCuerpo.innerHTML = '';
@@ -94,7 +93,6 @@ class ComponenteProductos {
 
     crearFilaProducto(prod: Producto): HTMLTableRowElement {
         const row = document.createElement('tr');
-        // ... (el HTML interno se mantiene igual, usando prod.nombre, etc.)
         row.innerHTML = `
             <td class="col-id">${prod.id}</td>
             <td class="col-imagen">
@@ -113,8 +111,9 @@ class ComponenteProductos {
         return row;
     }
 
-    // --- MÉTODOS DE MODAL Y FORMULARIO ---
     manejarNuevoProducto(): void {
+        this.idEnEdicion = null; 
+        
         if (this.modal) {
             this.modal.style.display = 'flex';
             if (this.formulario) { this.formulario.reset(); }
@@ -126,9 +125,28 @@ class ComponenteProductos {
         }
     }
     
+    manejarEditarProducto(idProducto: number): void {
+        const productoAEditar = this.productos.find(p => p.id === idProducto);
+        
+        if (productoAEditar) {
+            this.idEnEdicion = idProducto; 
+            
+            this.manejarNuevoProducto(); 
+
+            (document.getElementById('nombre-producto') as HTMLInputElement).value = productoAEditar.nombre;
+            (document.getElementById('descripcion-producto') as HTMLTextAreaElement).value = productoAEditar.descripcion;
+            (document.getElementById('imagen-producto') as HTMLInputElement).value = productoAEditar.imagen;
+            (document.getElementById('precio-producto') as HTMLInputElement).value = productoAEditar.precio.toString();
+            (document.getElementById('stock-producto') as HTMLInputElement).value = productoAEditar.stock.toString();
+            (document.getElementById('categoria-producto') as HTMLSelectElement).value = productoAEditar.categoriaid.toString();
+
+            document.querySelector('.modal-encabezado h3')!.textContent = `Editar Producto ID: ${idProducto}`;
+            (document.querySelector('.btn-guardar') as HTMLButtonElement).textContent = 'Guardar Cambios';
+        }
+    }
+    
     llenarDesplegableCategorias(): void {
         const select = document.getElementById('categoria-producto') as HTMLSelectElement;
-        // ... (la lógica se mantiene igual)
         if (!select) return;
 
         select.innerHTML = ''; 
@@ -151,121 +169,68 @@ class ComponenteProductos {
         if (this.modal) {
             this.modal.style.display = 'none';
             if (this.formulario) { this.formulario.reset(); }
-            this.adjuntarEventos(); 
+            this.idEnEdicion = null; 
         }
     }
 
-    async guardarProducto(event: Event): Promise<void> {
+    async manejarSubmitGlobal(event: Event): Promise<void> {
         event.preventDefault();
+        
+        if (this.idEnEdicion !== null) {
+            await this.guardarEdicionProducto(this.idEnEdicion);
+        } else {
+            await this.guardarProducto();
+        }
+    }
 
-        if (this.formulario) {
-            // IDs de inputs deben ser *-producto para ser coherentes
-            const nuevoPrecio = parseFloat((document.getElementById('precio-producto') as HTMLInputElement).value);
-            const nuevoStock = parseInt((document.getElementById('stock-producto') as HTMLInputElement).value);
-            const nuevaCategoriaId = parseInt((document.getElementById('categoria-producto') as HTMLSelectElement).value);
+    private recolectarDatosFormulario(): any {
+        const nuevoPrecio = parseFloat((document.getElementById('precio-producto') as HTMLInputElement).value);
+        const nuevoStock = parseInt((document.getElementById('stock-producto') as HTMLInputElement).value);
+        const nuevaCategoriaId = parseInt((document.getElementById('categoria-producto') as HTMLSelectElement).value);
+
+        if (isNaN(nuevoPrecio) || nuevoPrecio <= 0 || isNaN(nuevoStock) || nuevoStock < 0 || isNaN(nuevaCategoriaId)) {
+            alert("Por favor, ingrese valores válidos.");
+            return null;
+        }
+
+        return {
+            nombre: (document.getElementById('nombre-producto') as HTMLInputElement).value,
+            descripcion: (document.getElementById('descripcion-producto') as HTMLTextAreaElement).value,
+            imagen: (document.getElementById('imagen-producto') as HTMLInputElement).value || '',
+            precio: nuevoPrecio, 
+            stock: nuevoStock,
+            categoriaid: nuevaCategoriaId 
+        };
+    }
+
+    async guardarProducto(): Promise<void> {
+        const nuevoProductoData = this.recolectarDatosFormulario();
+        if (!nuevoProductoData) return;
+
+        try {
+            const response = await fetch(API_BASE_URL_PRODUCTOS, {
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(nuevoProductoData) 
+            });
+
+            if (!response.ok) {
+                throw new Error(`Fallo al crear el producto. Status: ${response.status}`);
+            }
             
-            if (isNaN(nuevoPrecio) || nuevoPrecio <= 0 || isNaN(nuevoStock) || nuevoStock < 0 || isNaN(nuevaCategoriaId)) {
-                alert("Por favor, ingrese valores válidos.");
-                return;
-            }
+            console.log('Producto creado exitosamente.');
+            await this.cargarProductos(); 
+            this.cerrarModal(); 
 
-            const nuevoProductoData = {
-                nombre: (document.getElementById('nombre-producto') as HTMLInputElement).value,
-                descripcion: (document.getElementById('descripcion-producto') as HTMLTextAreaElement).value,
-                imagen: (document.getElementById('imagen-producto') as HTMLInputElement).value || '',
-                precio: nuevoPrecio, 
-                stock: nuevoStock,
-                categoriaId: nuevaCategoriaId
-            };
-
-            try {
-                const response = await fetch(API_BASE_URL_PRODUCTOS, {
-                    method: 'POST', 
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(nuevoProductoData) 
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Fallo al crear el producto. Status: ${response.status}`);
-                }
-                
-                console.log('Producto creado exitosamente.');
-                await this.cargarProductos(); 
-                this.cerrarModal(); 
-
-            } catch (error) {
-                console.error("Error al guardar el producto:", error);
-                alert("Error al intentar guardar el producto.");
-            }
+        } catch (error) {
+            console.error("Error al guardar el producto:", error);
+            alert("Error al intentar guardar el producto.");
         }
     }
     
-    // --- MÉTODOS DE ACCIONES (ELIMINAR Y EDITAR) ---
-    async manejarEliminarProducto(idProducto: number): Promise<void> {
-        const productoAEliminar = this.productos.find(p => p.id === idProducto);
-        // ... (Lógica de eliminación se mantiene igual)
-        if (productoAEliminar && confirm(`¿Estás seguro que deseas eliminar el producto: ${productoAEliminar.nombre}?`)) {
-            try {
-                const response = await fetch(`${API_BASE_URL_PRODUCTOS}/${idProducto}`, { method: 'DELETE' });
-                if (!response.ok) {
-                    throw new Error(`Fallo al eliminar el producto. Status: ${response.status}`);
-                }
-                await this.cargarProductos(); 
-            } catch (error) {
-                console.error("Error al eliminar el producto:", error);
-                alert("Error al intentar eliminar el producto.");
-            }
-        }
-    }
-
-    manejarEditarProducto(idProducto: number): void {
-        const productoAEditar = this.productos.find(p => p.id === idProducto);
-
-        if (productoAEditar) {
-            this.manejarNuevoProducto(); 
-            
-            // Llenar campos con IDs CORREGIDOS
-            (document.getElementById('nombre-producto') as HTMLInputElement).value = productoAEditar.nombre;
-            (document.getElementById('descripcion-producto') as HTMLTextAreaElement).value = productoAEditar.descripcion;
-            (document.getElementById('imagen-producto') as HTMLInputElement).value = productoAEditar.imagen;
-            (document.getElementById('precio-producto') as HTMLInputElement).value = productoAEditar.precio.toString();
-            (document.getElementById('stock-producto') as HTMLInputElement).value = productoAEditar.stock.toString();
-            (document.getElementById('categoria-producto') as HTMLSelectElement).value = productoAEditar.categoriaId.toString();
-
-            // Configurar Modal para Edición (se mantiene la lógica de clonar)
-            const btnGuardar = document.querySelector('.btn-guardar') as HTMLButtonElement;
-            const form = this.formulario as HTMLFormElement;
-
-            document.querySelector('.modal-encabezado h3')!.textContent = `Editar Producto ID: ${idProducto}`;
-            btnGuardar.textContent = 'Guardar Cambios';
-
-            const newForm = form.cloneNode(true) as HTMLFormElement;
-            form.parentNode!.replaceChild(newForm, form);
-            this.formulario = newForm;
-            
-            this.formulario.addEventListener('submit', (e) => this.guardarEdicionProducto(e, idProducto));
-            
-            this.adjuntarEventos(true); 
-        }
-    }
-
-    async guardarEdicionProducto(event: Event, idProducto: number): Promise<void> {
-        event.preventDefault(); 
-        
-        // ... (La lógica de actualización se mantiene igual, usando los IDs corregidos)
-        const datosActualizados = {
-            nombre: (document.getElementById('nombre-producto') as HTMLInputElement).value,
-            descripcion: (document.getElementById('descripcion-producto') as HTMLTextAreaElement).value,
-            imagen: (document.getElementById('imagen-producto') as HTMLInputElement).value,
-            precio: parseFloat((document.getElementById('precio-producto') as HTMLInputElement).value),
-            stock: parseInt((document.getElementById('stock-producto') as HTMLInputElement).value),
-            categoriaId: parseInt((document.getElementById('categoria-producto') as HTMLSelectElement).value)
-        };
-
-        if (isNaN(datosActualizados.precio) || isNaN(datosActualizados.stock) || isNaN(datosActualizados.categoriaId)) {
-            alert("Por favor, ingrese valores válidos.");
-            return;
-        }
+    async guardarEdicionProducto(idProducto: number): Promise<void> {
+        const datosActualizados = this.recolectarDatosFormulario();
+        if (!datosActualizados) return;
 
         try {
             const response = await fetch(`${API_BASE_URL_PRODUCTOS}/${idProducto}`, {
@@ -280,7 +245,6 @@ class ComponenteProductos {
 
             await this.cargarProductos(); 
             this.cerrarModal(); 
-            this.adjuntarEventos(); 
 
         } catch (error) {
             console.error("Error al guardar la edición del producto:", error);
@@ -288,35 +252,40 @@ class ComponenteProductos {
         }
     }
 
-    // --- MÉTODOS DE INICIALIZACIÓN ---
-    adjuntarEventos(skipFormListeners: boolean = false): void {
-        // El botón usa la clase CSS antigua, pero el handler llama al método correcto
+    async manejarEliminarProducto(idProducto: number): Promise<void> {
+        const productoAEliminar = this.productos.find(p => p.id === idProducto);
+        if (productoAEliminar && confirm(`¿Estás seguro que deseas eliminar el producto: ${productoAEliminar.nombre}?`)) {
+            try {
+                const response = await fetch(`${API_BASE_URL_PRODUCTOS}/${idProducto}`, { method: 'DELETE' });
+                if (!response.ok) {
+                    throw new Error(`Fallo al eliminar el producto. Status: ${response.status}`);
+                }
+                await this.cargarProductos(); 
+            } catch (error) {
+                console.error("Error al eliminar el producto:", error);
+                alert("Error al intentar eliminar el producto.");
+            }
+        }
+    }
+
+    adjuntarEventosBase(): void {
         const newBtn = document.querySelector('.btn-nueva-categoria'); 
         if (newBtn) {
-            const handler = () => this.manejarNuevoProducto();
-            newBtn.removeEventListener('click', handler); 
-            newBtn.addEventListener('click', handler);
+            newBtn.addEventListener('click', () => this.manejarNuevoProducto());
         }
 
-        // El formulario usa el ID correcto
-        if (this.formulario && !skipFormListeners) {
-            const handler = (e: Event) => this.guardarProducto(e);
-            this.formulario.removeEventListener('submit', handler as EventListener);
-            this.formulario.addEventListener('submit', handler as EventListener);
+        if (this.formulario) {
+            this.formulario.addEventListener('submit', this.submitHandler);
         }
 
-        // Cierre de Modal
         if (this.modal) {
-            const modalCloseHandler = (e: Event) => {
+            this.modal.addEventListener('click', (e: Event) => {
                 if (e.target === this.modal) {
                     this.cerrarModal();
                 }
-            };
-            this.modal.removeEventListener('click', modalCloseHandler as EventListener);
-            this.modal.addEventListener('click', modalCloseHandler as EventListener);
+            });
         }
     }
 } 
 
-// Inicialización de la aplicación al cargar la página (CORREGIDO)
 const productosApp = new ComponenteProductos();
