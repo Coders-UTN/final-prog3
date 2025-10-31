@@ -196,7 +196,9 @@ class ComponenteCategorias {
       }
     });
     const closeBtn = document.querySelector(".modal-cerrar");
+    const cancelBtn = document.querySelector(".btn-cancelar");
 
+    cancelBtn?.addEventListener("click", () => this.cerrarModal());
     closeBtn?.addEventListener("click", () => this.cerrarModal());
   }
 }
