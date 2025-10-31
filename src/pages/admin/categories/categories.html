@@ -66,16 +66,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="col-id">1</td>
-                            <td class="col-imagen">
-                                <img src="https://www.carniceriademadrid.es/wp-content/uploads/2022/09/smash-burger-que-es.jpg" alt="Hamburguesas" class="img-categoria">
-                            </td>
-                            <td>Hamburguesas</td>
-                            <td>Diferentes hamburguesas de tipo smash</td>
-                            <td class="col-acciones">
-                                <button class="btn-editar">Editar</button>
-                                <button class="btn-eliminar">Eliminar</button>
-                            </td>
+                            
                         </tr>
                         </tbody>
                 </table>
@@ -86,7 +77,7 @@
     <div class="modal-contenido">
         <div class="modal-encabezado">
             <h3>Nueva Categoría</h3>
-            <span class="modal-cerrar" onclick="categoriasApp.cerrarModal()">×</span>
+            <span class="modal-cerrar">×</span>
         </div>
         <form id="formulario-categoria">
             <div class="grupo-formulario">
@@ -99,7 +90,7 @@
             </div>
             <div class="grupo-formulario">
                 <label for="imagen-categoria">URL de Imagen (o Archivo):</label>
-                <input type="text" id="imagen-categoria">
+                <input type="text" id="imagen-categoria" placeholder="Dejalo vacio para usar una imagen generica">
                 </div>
             <div class="modal-acciones">
                 <button type="submit" class="btn-guardar">Guardar Categoría</button>
@@ -109,6 +100,6 @@
     </div>
 </div>
 </div>
-<script src="./categories.ts"></script>
+<script type="module" src="./categories.ts"></script>
 </body>
 </html>
