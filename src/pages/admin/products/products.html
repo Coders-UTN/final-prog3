@@ -79,7 +79,7 @@
             <div class="modal-contenido">
                 <div class="modal-encabezado">
                     <h3>Nuevo Producto</h3>
-                    <span class="modal-cerrar" onclick="productosApp.cerrarModal()">×</span>
+                    <span class="modal-cerrar">×</span>
                 </div>
                 
                 <form id="formulario-producto">
@@ -96,7 +96,7 @@
                     
                     <div class="grupo-formulario">
                         <label for="imagen-producto">URL de Imagen (o Archivo):</label>
-                        <input type="text" id="imagen-producto">
+                        <input type="text" id="imagen-producto" placeholder="Dejalo vacio para cargar una imagen generica">
                     </div>
                     
                     <div class="grupo-formulario">
@@ -117,13 +117,13 @@
                     
                     <div class="modal-acciones">
                         <button type="submit" class="btn-guardar">Guardar Producto</button>
-                        <button type="button" class="btn-cancelar" onclick="productosApp.cerrarModal()">Cancelar</button>
+                        <button type="button" class="btn-cancelar">Cancelar</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
     
-    <script src="./products.js"></script> 
+    <script type="module" src="./products.js"></script> 
 </body>
 </html>
