@@ -192,7 +192,7 @@ tbody tr:last-child td {
 .img-producto { 
     width: 60px;
     height: 40px;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 3px;
     display: block;
 }
