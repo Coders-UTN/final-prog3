@@ -1,4 +1,3 @@
-/* --- General Setup --- */
 :root {
     --primary-color: #f75438; 
     --secondary-color: #28a745; 
@@ -27,7 +26,6 @@ body {
     min-height: 100vh;
 }
 
-/* --- Sidebar Styling --- */
 .barra-lateral {
     width: 250px;
     background-color: var(--sidebar-bg);
@@ -79,8 +77,6 @@ body {
     text-align: center;
 }
 
-
-/* --- Top Navigation Bar (Header) Styling --- */
 .area-contenido {
     flex-grow: 1;
     display: flex;
@@ -129,7 +125,6 @@ body {
     transition: background-color 0.2s;
 }
 
-/* --- Page Content Styling --- */
 .contenido-pagina {
     padding: 30px;
     flex-grow: 1;
@@ -158,7 +153,6 @@ body {
     margin-right: 5px;
 }
 
-/* --- Card and Table Styling --- */
 .tarjeta {
     background-color: var(--card-bg);
     border-radius: 8px;
@@ -198,7 +192,6 @@ tbody tr:last-child td {
     display: block;
 }
 
-/* Action Buttons */
 .col-acciones button {
     padding: 6px 10px;
     margin-right: 5px;
@@ -219,7 +212,6 @@ tbody tr:last-child td {
     color: white;
 }
 
-/* --- Modal Styling --- */
 .modal-fondo {
     display: none; 
     position: fixed;
@@ -304,4 +296,37 @@ tbody tr:last-child td {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.estado {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.9em;
+    color: white;
+    text-transform: uppercase;
+}
+
+.estado.pendiente {
+    background-color: #ffc107;
+    color: #333;
+}
+.estado.confirmado {
+    background-color: #007bff;
+}
+.estado.terminado {
+    background-color: #28a745;
+}
+.estado.cancelado {
+    background-color: #dc3545;
+}
+
+#lista-items-pedido {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 15px;
+}
+#lista-items-pedido li {
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
 }
