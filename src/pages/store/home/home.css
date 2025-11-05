@@ -1,0 +1,241 @@
+/* --- Variables y Setup General --- */
+:root {
+    --primary-color: #f75438; 
+    --secondary-color: #28a745; 
+    --delete-color: #dc3545; 
+    --bg-light: #f8f9fa; 
+    --sidebar-bg: #ffffff; 
+    --text-dark: #343a01;
+    --text-light: #6c757d;
+    --active-link-bg: #fff0ec; 
+    --border-color: #dee2e6;
+    --card-bg: #ffffff;
+    --table-header-bg: #ff6347;
+    --table-header-text: #ffffff;
+}
+
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+}
+
+/* --- Header de la Tienda --- */
+.navegacion-tienda {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: var(--sidebar-bg);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.logo-app {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.acciones-usuario {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--text-dark);
+}
+
+.btn-carrito {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-cerrar-sesion {
+    background-color: #f0ad4e;
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* --- Contenido de la Tienda --- */
+.contenido-tienda {
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.fila-encabezado {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* --- Grilla de Productos --- */
+.grilla-productos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.producto-card {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.producto-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.producto-card h3 {
+    font-size: 1.2em;
+    padding: 10px 15px 5px;
+    margin: 0;
+}
+
+.producto-card p {
+    font-size: 0.9em;
+    color: var(--text-light);
+    padding: 0 15px 10px;
+    flex-grow: 1;
+}
+
+.producto-card .precio-stock {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 15px 10px;
+    font-weight: 600;
+}
+
+.producto-card .precio-stock .precio {
+    color: var(--primary-color);
+    font-size: 1.1em;
+}
+
+.btn-agregar-carrito {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    width: 100%;
+}
+.btn-agregar-carrito:hover {
+    background-color: #218838;
+}
+
+/* --- Modal Carrito (Reutiliza estilos del admin) --- */
+.modal-fondo {
+    display: none; 
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4); 
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-contenido {
+    background-color: #fefefe;
+    margin: 5% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%; 
+    max-width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal-encabezado {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.modal-cerrar {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-cuerpo #lista-items-carrito {
+    list-style-type: none;
+    padding: 0;
+    max-height: 300px;
+    overflow-y: auto;
+}
+.modal-cuerpo #lista-items-carrito li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+.modal-cuerpo #lista-items-carrito li:last-child {
+    border-bottom: none;
+}
+
+.modal-cuerpo #carrito-total {
+    text-align: right;
+    font-size: 1.3em;
+    color: var(--text-dark);
+    margin-top: 15px;
+}
+
+.modal-acciones {
+    text-align: right;
+    padding-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn-guardar {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-cancelar {
+    background-color: var(--text-light);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-eliminar {
+    background-color: var(--delete-color);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

@@ -56,12 +56,12 @@ document.addEventListener('DOMContentLoaded', () => {
             //Auto-login. (Esto no se si iria  Podriamos hacer que redireccione al login)
             saveUser(registrarUsuario); 
 
-            mensajeError.textContent = `Bienvenido, ${registrarUsuario.nombre}, serás redireccionado al login...`;
+            mensajeError.textContent = `Bienvenido, ${registrarUsuario.nombre}, serás redireccionado al home...`;
             mensajeError.style.color = 'green';
 
-            // Luego de 2 segundos te manda al login
+            // Luego de 2 segundos te manda al home
             setTimeout(() => {
-                navigateTo('/auth/login/login.html'); 
+                navigateTo('/src/pages/store/home/home.html'); 
             }, 2000);
 
         } catch (error: any) {

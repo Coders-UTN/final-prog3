@@ -1,40 +1,36 @@
 import { login } from "../../../utils/auth";
 import { saveUser } from "../../../utils/localStorage"; 
 import { navigateTo } from "../../../utils/navigate";     
+import type { IUser } from "../../../types/IUser";
 
-// Espera a que el DOM esté cargado para asignar los eventos
 document.addEventListener('DOMContentLoaded', () => {
     
-    // Busca:
-
-    // "login-form" 
     const loginForm = document.getElementById('login-form') as HTMLFormElement;
-    
-    // inputs
     const emailInput = document.getElementById('email') as HTMLInputElement;
     const passwordInput = document.getElementById('password') as HTMLInputElement;
-    
-    // p error: 
     const mensajeError = document.getElementById('error-message') as HTMLParagraphElement;
 
-    // Conexion formulario
     loginForm.addEventListener('submit', async (event) => {
         
-        event.preventDefault();  //Evita que se recargue la pagina (no tocar)
+        event.preventDefault();
 
-        mensajeError.textContent = ''; //Limpia errores previos
+        mensajeError.textContent = ''; 
         const credentials = {
             email: emailInput.value,
             password: passwordInput.value
         };
 
         try {
-            // Intenta hacer login
-            const loggedInUser = await login(credentials);
+            const loggedInUser: IUser = await login(credentials);
 
-            // Si ta todo ok:
             console.log("Inicio de sesión exitoso:", loggedInUser);
             saveUser(loggedInUser); 
+
+            if (loggedInUser && loggedInUser.id) {
+                localStorage.setItem('usuarioId', loggedInUser.id.toString());
+            } else {
+                console.warn("El objeto 'loggedInUser' no tiene un campo 'id'. El carrito puede fallar.");
+            }
             
             mensajeError.textContent = `¡Bienvenido, ${loggedInUser.nombre}!`;
             mensajeError.style.color = 'green';
@@ -44,9 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 1500); 
 
         } catch (error: any) {
-            // si no: 
             console.error("Error de login:", error);
-            mensajeError.textContent = error.message // "Error al iniciar sesión.";
+            mensajeError.textContent = error.message
             mensajeError.style.color = 'red';
         }
     });

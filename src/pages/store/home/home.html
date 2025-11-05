@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Store - Tienda</title>
+    <link rel="stylesheet" href="./home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+<body>
+
+    <header class="navegacion-tienda">
+        <div class="logo-app">
+            <i class="fas fa-utensils"></i> Food Store
+        </div>
+        <div class="acciones-usuario">
+            <a href="../../admin/dashboard/dashboard.html" class="nav-link">Panel Admin</a>
+            <button class="btn-carrito" id="btn-ver-carrito">
+                <i class="fas fa-shopping-cart"></i>
+                Carrito (<span id="carrito-cantidad">0</span>)
+            </button>
+            <button class="btn-cerrar-sesion" id="btn-logout">Cerrar Sesión</button>
+        </div>
+    </header>
+
+    <main class="contenido-tienda">
+        <div class="fila-encabezado">
+            <h2>Nuestros Productos</h2>
+            </div>
+
+        <div id="lista-productos" class="grilla-productos">
+            </div>
+    </main>
+
+    <div id="modal-carrito" class="modal-fondo">
+        <div class="modal-contenido">
+            <div class="modal-encabezado">
+                <h3>Mi Carrito</h3>
+                <span class="modal-cerrar" id="btn-cerrar-modal-carrito">×</span>
+            </div>
+            
+            <div class="modal-cuerpo">
+                <ul id="lista-items-carrito">
+                    <li>Tu carrito está vacío.</li>
+                </ul>
+                <hr>
+                <h3 id="carrito-total">Total: $0.00</h3>
+            </div>
+
+            <div class="modal-acciones">
+                <button type="button" class="btn-guardar" id="btn-finalizar-compra">Finalizar Compra</button>
+                <button type="button" class="btn-eliminar" id="btn-vaciar-carrito">Vaciar Carrito</button>
+                <button type="button" class="btn-cancelar" id="btn-cerrar-modal-cancelar">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="./home.js"></script>
+    <script type="module" src="../cart/cart.js"></script>
+</body>
+</html>
