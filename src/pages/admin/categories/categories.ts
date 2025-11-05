@@ -269,6 +269,18 @@ async guardarEdicion(event: Event, idCategoria: number): Promise<void> {
             this.modal.addEventListener('click', modalCloseHandler);
         }
     }
+
+     cerrarSesion(): void {
+        if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+            // 1. Limpiar localStorage
+            localStorage.removeItem('user_data');
+            localStorage.removeItem('token');
+            localStorage.removeItem('usuario');
+            
+            // 2. Redirigir a la página de login
+            window.location.href = '../login/login.html';
+        }
+    }
 } // CIERRE DE LA CLASE CORREGIDO
 
 // Inicialización de la aplicación al cargar la página

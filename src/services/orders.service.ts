@@ -1,0 +1,36 @@
+import type { IOrder } from "../types/IOrder";
+
+const API_BASE_URL_PEDIDOS = 'http://localhost:8080/api/pedidos';
+
+export const findAllOrders = async (): Promise<IOrder[]> => {
+    const response = await fetch(API_BASE_URL_PEDIDOS); 
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
+};
+
+export const updateOrderStatus = async (id: number, estado: string): Promise<IOrder> => {
+    const response = await fetch(`${API_BASE_URL_PEDIDOS}/${id}/estado`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ estado: estado })
+    });
+    
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
+};
+
+export const cancelOrder = async (id: number): Promise<void> => {
+    const response = await fetch(`${API_BASE_URL_PEDIDOS}/${id}/cancelar`, {
+        method: 'PUT'
+    });
+    
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+    }
+};

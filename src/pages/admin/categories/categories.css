@@ -123,6 +123,10 @@ body {
     transition: background-color 0.2s;
 }
 
+.btn-cerrar-sesion:hover {
+    background: #b68643;
+}
+
 .enlace-nav {
     text-decoration: none;
     color: var(--text-dark);

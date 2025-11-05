@@ -1,9 +1,15 @@
-/**
- * Redirige al usuario a una nueva página dentro del sitio.
- * @param path - La ruta a la que se quiere navegar (ej. "/client/home/home.html")
- */
+// utils/navigate.ts (VERSIÓN MEJORADA)
 export const navigateTo = (path: string) => {
-    // window.location.origin nos da la base (ej. "http://localhost:5173")
-    // y le sumamos la ruta que queremos.
-    window.location.href = `${window.location.origin}${path}`;
+    // Si la ruta ya empieza con http, usarla directamente
+    if (path.startsWith('http')) {
+        window.location.href = path;
+    } 
+    // Si empieza con /, asumir que es desde la raíz del dominio
+    else if (path.startsWith('/')) {
+        window.location.href = `${window.location.origin}${path}`;
+    }
+    // Si es una ruta relativa, agregar el origen
+    else {
+        window.location.href = `${window.location.origin}/${path}`;
+    }
 };

@@ -120,12 +120,17 @@ body {
 }
 
 .btn-cerrar-sesion {
-    background-color: transparent;
-    border: 1px solid var(--text-light);
-    color: var(--text-dark);
+    background-color: #f0ad4e;
+    border: none;
+    color: white;
     padding: 5px 10px;
     cursor: pointer;
     border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.btn-cerrar-sesion:hover {
+    background: #b68643;
 }
 
 /* --- Page Content Styling --- */

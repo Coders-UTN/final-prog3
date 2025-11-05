@@ -1,3 +1,4 @@
+// --- 1. URLs y Estructuras de Datos ---
 const API_BASE_URL_PRODUCTOS = 'http://localhost:8080/api/productos';
 const API_BASE_URL_CATEGORIAS = 'http://localhost:8080/api/categorias';
 
@@ -25,7 +26,10 @@ class ComponenteProductos {
     formulario: HTMLFormElement | null;
     tablaCuerpo: HTMLElement | null;
     
-    private idEnEdicion: number | null = null;
+    // Almacena el ID si estamos en modo edición, o null para creación.
+    private idEnEdicion: number | null = null; 
+    
+    // Almacenamos la referencia para el evento submit.
     private submitHandler: (e: Event) => void;
     
     constructor() {
@@ -34,17 +38,21 @@ class ComponenteProductos {
         this.formulario = document.getElementById('formulario-producto') as HTMLFormElement; 
         this.tablaCuerpo = document.querySelector('.tarjeta table tbody');
 
+        // Asignación de la función binded para usar como handler
         this.submitHandler = this.manejarSubmitGlobal.bind(this);
         
         this.inicializarApp();
-        this.adjuntarEventosBase();
+        // Adjuntamos eventos del formulario y botones principales una sola vez.
+        this.adjuntarEventosBase(); 
     }
     
+    // --- LÓGICA DE CARGA DE DATOS ---
     async inicializarApp(): Promise<void> {
         await this.cargarCategoriasParaDesplegable(); 
         await this.cargarProductos();
     }
     
+    // Lógica de cargarCategoriasParaDesplegable... (sin cambios)
     async cargarCategoriasParaDesplegable(): Promise<void> {
         try {
             const response = await fetch(API_BASE_URL_CATEGORIAS);
@@ -57,6 +65,7 @@ class ComponenteProductos {
         }
     }
 
+    // Lógica de cargarProductos... (sin cambios)
     async cargarProductos(): Promise<void> {
         try {
             const response = await fetch(API_BASE_URL_PRODUCTOS);
@@ -81,6 +90,7 @@ class ComponenteProductos {
         }
     }
 
+    // Lógica de renderizarProductos... (sin cambios)
     renderizarProductos(): void { 
         if (!this.tablaCuerpo) return;
         this.tablaCuerpo.innerHTML = '';
@@ -91,6 +101,7 @@ class ComponenteProductos {
         });
     }
 
+    // Lógica de crearFilaProducto... (sin cambios)
     crearFilaProducto(prod: Producto): HTMLTableRowElement {
         const row = document.createElement('tr');
         row.innerHTML = `
@@ -111,8 +122,10 @@ class ComponenteProductos {
         return row;
     }
 
+    // --- MÉTODOS DE MODAL Y FORMULARIO ---
+
     manejarNuevoProducto(): void {
-        this.idEnEdicion = null; 
+        this.idEnEdicion = null; // MODO CREACIÓN
         
         if (this.modal) {
             this.modal.style.display = 'flex';
@@ -129,10 +142,12 @@ class ComponenteProductos {
         const productoAEditar = this.productos.find(p => p.id === idProducto);
         
         if (productoAEditar) {
-            this.idEnEdicion = idProducto; 
+            this.idEnEdicion = idProducto; // Establece el ID para el modo edición
             
+            // Reutiliza manejarNuevoProducto para abrir el modal y limpiar/configurar
             this.manejarNuevoProducto(); 
 
+            // Rellenar campos
             (document.getElementById('nombre-producto') as HTMLInputElement).value = productoAEditar.nombre;
             (document.getElementById('descripcion-producto') as HTMLTextAreaElement).value = productoAEditar.descripcion;
             (document.getElementById('imagen-producto') as HTMLInputElement).value = productoAEditar.imagen;
@@ -140,11 +155,15 @@ class ComponenteProductos {
             (document.getElementById('stock-producto') as HTMLInputElement).value = productoAEditar.stock.toString();
             (document.getElementById('categoria-producto') as HTMLSelectElement).value = productoAEditar.categoriaid.toString();
 
+            // Actualizar textos del modal
             document.querySelector('.modal-encabezado h3')!.textContent = `Editar Producto ID: ${idProducto}`;
             (document.querySelector('.btn-guardar') as HTMLButtonElement).textContent = 'Guardar Cambios';
+            
+            // Importante: No se clona el formulario ni se adjuntan nuevos listeners.
         }
     }
     
+    // Lógica de llenarDesplegableCategorias... (sin cambios)
     llenarDesplegableCategorias(): void {
         const select = document.getElementById('categoria-producto') as HTMLSelectElement;
         if (!select) return;
@@ -169,16 +188,20 @@ class ComponenteProductos {
         if (this.modal) {
             this.modal.style.display = 'none';
             if (this.formulario) { this.formulario.reset(); }
+            // Limpia el estado de edición al cerrar
             this.idEnEdicion = null; 
         }
     }
 
+    // --- MANEJADOR DE SUBMIT CENTRALIZADO ---
     async manejarSubmitGlobal(event: Event): Promise<void> {
         event.preventDefault();
         
         if (this.idEnEdicion !== null) {
+            // Llama a edición si idEnEdicion está seteado
             await this.guardarEdicionProducto(this.idEnEdicion);
         } else {
+            // Llama a creación si idEnEdicion es null
             await this.guardarProducto();
         }
     }
@@ -215,7 +238,9 @@ class ComponenteProductos {
             });
 
             if (!response.ok) {
-                throw new Error(`Fallo al crear el producto. Status: ${response.status}`);
+                // Aquí deberías manejar errores 409/400 del servidor
+                const errorText = await response.text();
+                throw new Error(`Fallo al crear el producto. Status: ${response.status}. Detalle: ${errorText.substring(0, 100)}...`);
             }
             
             console.log('Producto creado exitosamente.');
@@ -224,12 +249,13 @@ class ComponenteProductos {
 
         } catch (error) {
             console.error("Error al guardar el producto:", error);
-            alert("Error al intentar guardar el producto.");
+            alert("Error al intentar guardar el producto. Verifique la consola para detalles.");
         }
     }
-    
+
     async guardarEdicionProducto(idProducto: number): Promise<void> {
-        const datosActualizados = this.recolectarDatosFormulario();
+        // Obtenemos los datos del formulario (la validación se hace dentro de recolectarDatos)
+        const datosActualizados = this.recolectarDatosFormulario(); 
         if (!datosActualizados) return;
 
         try {
@@ -240,20 +266,25 @@ class ComponenteProductos {
             });
 
             if (!response.ok) {
-                throw new Error(`Fallo al actualizar el producto. Status: ${response.status}`);
+                 // Aquí deberías manejar errores 409/400 del servidor
+                const errorText = await response.text();
+                throw new Error(`Fallo al actualizar el producto. Status: ${response.status}. Detalle: ${errorText.substring(0, 100)}...`);
             }
 
+            console.log(`Producto ID ${idProducto} actualizado exitosamente.`);
             await this.cargarProductos(); 
             this.cerrarModal(); 
 
         } catch (error) {
             console.error("Error al guardar la edición del producto:", error);
-            alert("Error al intentar actualizar el producto.");
+            alert("Error al intentar actualizar el producto. Verifique la consola para detalles.");
         }
     }
-
+    
+    // --- MÉTODOS DE ACCIONES (ELIMINAR) ---
     async manejarEliminarProducto(idProducto: number): Promise<void> {
         const productoAEliminar = this.productos.find(p => p.id === idProducto);
+        // ... (Lógica de eliminación se mantiene igual)
         if (productoAEliminar && confirm(`¿Estás seguro que deseas eliminar el producto: ${productoAEliminar.nombre}?`)) {
             try {
                 const response = await fetch(`${API_BASE_URL_PRODUCTOS}/${idProducto}`, { method: 'DELETE' });
@@ -268,16 +299,19 @@ class ComponenteProductos {
         }
     }
 
+    // --- MÉTODOS DE INICIALIZACIÓN ---
     adjuntarEventosBase(): void {
         const newBtn = document.querySelector('.btn-nueva-categoria'); 
         if (newBtn) {
             newBtn.addEventListener('click', () => this.manejarNuevoProducto());
         }
 
+        // Adjunta el manejador submit UNA SOLA VEZ
         if (this.formulario) {
             this.formulario.addEventListener('submit', this.submitHandler);
         }
 
+        // Cierre de Modal
         if (this.modal) {
             this.modal.addEventListener('click', (e: Event) => {
                 if (e.target === this.modal) {
@@ -285,7 +319,27 @@ class ComponenteProductos {
                 }
             });
         }
+        
+        // CORRECCIÓN: Botón Cerrar Sesión
+        const btnCerrarSesion = document.querySelector('.btn-cerrar-sesion');
+        if (btnCerrarSesion) {
+            // Asigna el evento directamente sin depender del onclick del HTML
+            btnCerrarSesion.addEventListener('click', () => this.cerrarSesion());
+        }
+    }
+
+    cerrarSesion(): void {
+        if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+            // 1. Limpiar localStorage
+            localStorage.removeItem('user_data');
+            localStorage.removeItem('token');
+            localStorage.removeItem('usuario');
+            
+            // 2. Redirigir a la página de login
+            window.location.href = '../login/login.html';
+        }
     }
 } 
 
+// Inicialización de la aplicación
 const productosApp = new ComponenteProductos();
