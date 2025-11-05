@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Producto - Food Store</title>
+    <link rel="stylesheet" href="./productDetail.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+<body>
+    <div class="contenedor-principal">
+        <!-- Header -->
+        <header class="navegacion-superior">
+            <div class="logo-app">
+                <i class="fas fa-utensils"></i> Food Store
+            </div>
+            <div class="acciones-usuario">
+                <a href="../home/home.html" class="enlace-nav">
+                    <i class="fas fa-arrow-left"></i> Volver a Productos
+                </a>
+                <a href="../cart/cart.html" class="enlace-nav carrito-link">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="contador-carrito" id="contador-carrito-header">0</span>
+                </a>
+                <span class="texto-nav" id="nombre-usuario">Bienvenido</span>
+                <button class="btn-cerrar-sesion" onclick="productDetailApp.cerrarSesion()">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </header>
+
+        <!-- Contenido Principal -->
+        <main class="contenido-detalle">
+            <div class="detalle-producto" id="detalle-producto">
+                <!-- El producto se cargará aquí dinámicamente -->
+                <div class="estado-carga">Cargando producto...</div>
+            </div>
+
+            <!-- Productos Relacionados -->
+            <section class="productos-relacionados" id="productos-relacionados">
+                <h3>Productos Relacionados</h3>
+                <div class="grid-relacionados" id="grid-relacionados">
+                    <!-- Productos relacionados se cargarán aquí -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal de confirmación -->
+    <div id="modal-agregado" class="modal-fondo">
+        <div class="modal-contenido modal-pequeno">
+            <div class="modal-encabezado">
+                <h3>✅ Producto Agregado</h3>
+            </div>
+            <div class="modal-cuerpo">
+                <p>El producto se ha agregado correctamente al carrito.</p>
+                <div class="modal-acciones">
+                    <button type="button" class="btn-seguir-comprando" onclick="productDetailApp.cerrarModal()">
+                        Seguir Comprando
+                    </button>
+                    <button type="button" class="btn-ver-carrito" onclick="productDetailApp.irAlCarrito()">
+                        Ver Carrito
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./productDetail.ts"></script>
+</body>
+</html>

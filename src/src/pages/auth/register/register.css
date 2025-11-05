@@ -1,0 +1,107 @@
+:root {
+  --fondo-gradiente: linear-gradient(
+    90deg,
+    rgba(255, 109, 64, 1) 0%,
+    rgba(254, 131, 60, 1) 50%
+  );
+  --primary: #ff6b35;
+  /* Naranja principal */
+  --secondary: #f7931e;
+  /* Naranja secundario */
+  --dark: #2d3436;
+  /* Texto oscuro */
+  --light: #f5f6fa;
+  /* Fondo claro */
+  --success: #00b894;
+  /* Verde éxito */
+  --danger: #d63031;
+  /* Rojo peligro */
+  --gray: #dfe6e9;
+  /* Gris borders */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background-image: var(--fondo-gradiente);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+}
+
+.formulario{
+    background-color: var(--light);
+    width: 400px;
+    min-height: 75vh; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    border-radius: 20px;
+        box-shadow: 4px 4px 6px grey;
+}
+
+.formulario__titulo{
+    color: var(--primary);
+    margin-top: 20px;
+    font-size: 2rem;
+}
+
+.formulario__contenedor{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.contenedor__input{
+    display: flex;
+    flex-direction: column;
+
+}
+
+.formulario__input{
+    margin-bottom: 10px;
+    margin-top: 5px;
+    height: 30px;
+    border-radius: 5px;
+    border: solid gray 1px;
+    text-indent: 10px;
+}
+.formulario__contenedor-checkbox{
+  display: flex;
+  justify-content: center;
+}
+
+#mostrar-contrasena{
+  margin: 0px 10px;
+}
+
+.formulario__boton{
+    background-color: var(--primary);
+    height: 30px;
+    border: solid var(--primary) 2px;
+    border-radius: 10px;
+    color: var(--light);
+    font-weight: bold;
+}
+
+.formulario__boton:hover{
+    background-color: #d63031;
+    transition: 300ms;
+    cursor: pointer;
+}
+
+.formulario__error{
+  margin: 10px 0px;
+  color: red;
+}
+
+.formulario__texto{
+  margin-top: 10px;
+}
