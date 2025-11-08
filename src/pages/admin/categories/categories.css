@@ -123,10 +123,6 @@ body {
     transition: background-color 0.2s;
 }
 
-.btn-cerrar-sesion:hover {
-    background: #b68643;
-}
-
 .enlace-nav {
     text-decoration: none;
     color: var(--text-dark);
@@ -197,7 +193,7 @@ tbody tr:last-child td {
 .img-categoria {
     width: 60px; 
     height: 40px;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 3px;
     display: block;
 }
