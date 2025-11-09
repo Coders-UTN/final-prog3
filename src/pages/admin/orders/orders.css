@@ -22,8 +22,8 @@ body {
 }
 
 .contenedor-principal {
-    display: flex;
-    min-height: 100vh;
+  display: none;
+  transition: opacity 0.2s ease-in;
 }
 
 .barra-lateral {
@@ -40,7 +40,11 @@ body {
     color: var(--text-dark);
     padding: 0 20px 5px;
 }
-
+.enlace-nav {
+    text-decoration: none;
+    color: var(--text-dark);
+    margin-right: 15px;
+}
 .info-panel {
     font-size: 0.9em;
     color: var(--text-light);

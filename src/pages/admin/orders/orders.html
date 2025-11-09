@@ -1,104 +1,106 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gestión de Pedidos</title>
-    <link rel="stylesheet" href="./orders.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-</head>
-<body>
+    <link rel="stylesheet" href="./orders.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+  </head>
+  <body>
     <div class="contenedor-principal">
-    
-        <aside class="barra-lateral">
-            <div class="encabezado-admin">Administración</div>
-            <div class="info-panel">Panel de control</div>
-            
-            <nav class="menu">
-                <a href="#" class="item-menu">
-                    <i class="fas fa-tachometer-alt"></i> Dashboard
-                </a>
-                <a href="../categories/categories.html" class="item-menu">
-                    <i class="fas fa-tags"></i> Categorias
-                </a>
-                <a href="../products/products.html" class="item-menu">
-                    <i class="fas fa-box"></i> Productos
-                </a>
-                <a href="../orders/orders.html" class="item-menu activo">
-                    <i class="fas fa-receipt"></i> Pedidos
-                </a>
-                <a href="#" class="item-menu separador"></a>
-                <a href="#" class="item-menu">
-                    <i class="fas fa-store"></i> Ver Tienda
-                </a>
-            </nav>
-        </aside>
+      <aside class="barra-lateral">
+        <div class="encabezado-admin">Administración</div>
+        <div class="info-panel">Panel de control</div>
 
-        <main class="area-contenido">
-            <header class="navegacion-superior">
-                <div class="logo-app">
-                    <i class="fas fa-utensils"></i> Food Store
-                </div>
-                <div class="acciones-usuario">
-                    <a href="#" class="nav-link">Tienda</a>
-                    <span class="texto-nav">Panel Admin | Juan Pérez</span>
-                    <button class="btn-cerrar-sesion">Cerrar Sesión</button>
-                </div>
-            </header>
+        <nav class="menu">
+          <a href="/src/pages/admin/adminHome/adminHome.html" class="item-menu">
+            <i class="fas fa-tachometer-alt"></i> Dashboard
+          </a>
+          <a href="../categories/categories.html" class="item-menu">
+            <i class="fas fa-tags"></i> Categorias
+          </a>
+          <a href="../products/products.html" class="item-menu">
+            <i class="fas fa-box"></i> Productos
+          </a>
+          <a href="../orders/orders.html" class="item-menu activo">
+            <i class="fas fa-receipt"></i> Pedidos
+          </a>
+        </nav>
+      </aside>
 
-            <div class="contenido-pagina">
-                <div class="fila-encabezado">
-                    <h2>Gestión de Pedidos</h2>
-                </div>
+      <main class="area-contenido">
+        <header class="navegacion-superior">
+          <div class="logo-app"><i class="fas fa-utensils"></i> Food Store</div>
+          <div class="acciones-usuario">
+            <a
+              href="/src/pages/store/home/home.html"
+              class="enlace-nav"
+              target="_blank"
+            >
+              <i class="fas fa-store"></i> Ver Tienda
+            </a>
+            <span class="texto-nav">Panel Admin</span>
+            <button class="btn-cerrar-sesion" id="boton-cerrar-sesion">Cerrar Sesión</button>
+          </div>
+        </header>
 
-                <div class="tarjeta">
-                    <table>
-                        <thead>
-                            <tr class="cabecera-tabla">
-                                <th>ID</th>
-                                <th>Fecha</th>
-                                <th>Cliente</th>
-                                <th>Total</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </main>
-        
-        <div id="modal-detalle-pedido" class="modal-fondo">
-            <div class="modal-contenido">
-                <div class="modal-encabezado">
-                    <h3 id="modal-titulo-pedido">Detalle del Pedido</h3>
-                    <span class="modal-cerrar">×</span>
-                </div>
-                
-                <div class="modal-cuerpo">
-                    <h4>Items del Pedido:</h4>
-                    <ul id="lista-items-pedido">
-                    </ul>
-                    <hr>
-                    <h4>Actualizar Estado:</h4>
-                    <select id="select-estado-pedido">
-                        <option value="PENDIENTE">Pendiente</option>
-                        <option value="CONFIRMADO">Confirmado</option>
-                        <option value="TERMINADO">Terminado</option>
-                        <option value="CANCELADO">Cancelado</option>
-                    </select>
-                </div>
+        <div class="contenido-pagina">
+          <div class="fila-encabezado">
+            <h2>Gestión de Pedidos</h2>
+          </div>
 
-                <div class="modal-acciones">
-                    <button type="button" class="btn-guardar" id="btn-guardar-estado">Actualizar Estado</button>
-                    <button type="button" class="btn-cancelar">Cerrar</button>
-                </div>
-            </div>
+          <div class="tarjeta">
+            <table>
+              <thead>
+                <tr class="cabecera-tabla">
+                  <th>ID</th>
+                  <th>Fecha</th>
+                  <th>Cliente</th>
+                  <th>Total</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
         </div>
+      </main>
+
+      <div id="modal-detalle-pedido" class="modal-fondo">
+        <div class="modal-contenido">
+          <div class="modal-encabezado">
+            <h3 id="modal-titulo-pedido">Detalle del Pedido</h3>
+            <span class="modal-cerrar">×</span>
+          </div>
+
+          <div class="modal-cuerpo">
+            <h4>Items del Pedido:</h4>
+            <ul id="lista-items-pedido"></ul>
+            <hr />
+            <h4>Actualizar Estado:</h4>
+            <select id="select-estado-pedido">
+              <option value="PENDIENTE">Pendiente</option>
+              <option value="CONFIRMADO">Confirmado</option>
+              <option value="TERMINADO">Terminado</option>
+              <option value="CANCELADO">Cancelado</option>
+            </select>
+          </div>
+
+          <div class="modal-acciones">
+            <button type="button" class="btn-guardar" id="btn-guardar-estado">
+              Actualizar Estado
+            </button>
+            <button type="button" class="btn-cancelar">Cerrar</button>
+          </div>
+        </div>
+      </div>
     </div>
-    
-    <script type="module" src="./orders.js"></script> 
-</body>
+
+    <script type="module" src="./orders.js"></script>
+  </body>
 </html>
