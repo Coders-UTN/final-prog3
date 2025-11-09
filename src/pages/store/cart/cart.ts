@@ -40,6 +40,7 @@ class CartApp {
     const usuario = this.getUsuarioLogueado();
     if (!usuario) {
       window.location.href = "/src/pages/store/home/home.html";
+      alert("Solo los usuarios logueados pueden hacer uso del carrito");
       return;
     }
     this.actualizarNombreUsuario(usuario.nombre);
