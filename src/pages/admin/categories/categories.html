@@ -14,7 +14,7 @@
         <div class="info-panel">Panel de control</div>
         
         <nav class="menu">
-            <a href="#" class="item-menu">
+            <a href="/src/pages/admin/adminHome/adminHome.html" class="item-menu">
                 <i class="fas fa-tachometer-alt"></i> Dashboard
             </a>
             <a href="../categories/categories.html" class="item-menu activo">
@@ -23,12 +23,8 @@
             <a href="../products/products.html" class="item-menu">
                 <i class="fas fa-box"></i> Productos
             </a>
-            <a href="#" class="item-menu">
+            <a href="/src/pages/admin/orders/orders.html" class="item-menu">
                 <i class="fas fa-receipt"></i> Pedidos
-            </a>
-            <a href="#" class="item-menu separador"></a>
-            <a href="#" class="item-menu">
-                <i class="fas fa-store"></i> Ver Tienda
             </a>
         </nav>
     </aside>
@@ -39,9 +35,15 @@
                 <i class="fas fa-utensils"></i> Food Store
             </div>
             <div class="acciones-usuario">
-                <a href="#" class="enlace-nav">Tienda</a>
-                <span class="texto-nav">Panel Admin | Juan Pérez</span>
-                <button class="btn-cerrar-sesion" onclick="categoriasApp.cerrarSesion()">Cerrar Sesión</button>
+                 <a
+              href="/src/pages/store/home/home.html"
+              class="enlace-nav"
+              target="_blank"
+            >
+              <i class="fas fa-store"></i> Ver Tienda
+            </a>
+                <span class="texto-nav">Panel Admin </span>
+                <button class="btn-cerrar-sesion" id="boton-cerrar-sesion">Cerrar Sesión</button>
             </div>
         </header>
 
@@ -66,16 +68,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="col-id">1</td>
-                            <td class="col-imagen">
-                                <img src="https://www.carniceriademadrid.es/wp-content/uploads/2022/09/smash-burger-que-es.jpg" alt="Hamburguesas" class="img-categoria">
-                            </td>
-                            <td>Hamburguesas</td>
-                            <td>Diferentes hamburguesas de tipo smash</td>
-                            <td class="col-acciones">
-                                <button class="btn-editar">Editar</button>
-                                <button class="btn-eliminar">Eliminar</button>
-                            </td>
+                            
                         </tr>
                         </tbody>
                 </table>
@@ -86,7 +79,7 @@
     <div class="modal-contenido">
         <div class="modal-encabezado">
             <h3>Nueva Categoría</h3>
-            <span class="modal-cerrar" onclick="categoriasApp.cerrarModal()">×</span>
+            <span class="modal-cerrar">×</span>
         </div>
         <form id="formulario-categoria">
             <div class="grupo-formulario">
@@ -99,16 +92,16 @@
             </div>
             <div class="grupo-formulario">
                 <label for="imagen-categoria">URL de Imagen (o Archivo):</label>
-                <input type="text" id="imagen-categoria">
+                <input type="text" id="imagen-categoria" placeholder="Dejalo vacio para usar una imagen generica">
                 </div>
             <div class="modal-acciones">
                 <button type="submit" class="btn-guardar">Guardar Categoría</button>
-                <button type="button" class="btn-cancelar" onclick="categoriasApp.cerrarModal()">Cancelar</button>
+                <button type="button" class="btn-cancelar">Cancelar</button>
             </div>
         </form>
     </div>
 </div>
 </div>
-<script src="./categories.ts"></script>
+<script type="module" src="./categories.ts"></script>
 </body>
 </html>
