@@ -1,6 +1,6 @@
 import type { ICategoria } from "../../../types/ICategoria";
 import type { IProducto } from "../../../types/IProduct";
-import { isAdminUser, isLoggedIn } from "../../../utils/auth";
+import { cerrarSesion, isAdminUser, isLoggedIn } from "../../../utils/auth";
 
 // --- URLs - Usa los endpoints que YA TIENES ---
 const API_BASE_URL_PRODUCTOS = "http://localhost:8080/api/productos";
@@ -225,30 +225,13 @@ class HomeApp {
     const carrito = localStorage.getItem("carrito");
     return carrito ? JSON.parse(carrito) : [];
   }
-  cerrarSesion(): void {
-    if (confirm("¿Estás seguro de que deseas cerrar sesión?")) {
-      localStorage.removeItem("food_store_user");
-      window.location.href = "../../login/login.html";
-    }
-  }
 
   // --- Eventos ---
   adjuntarEventos(): void {
-    if (this.buscador) {
-      this.buscador.addEventListener("input", () => this.filtrarProductos());
-    }
 
-    if (this.filtroCategoria) {
-      this.filtroCategoria.addEventListener("change", () =>
-        this.filtrarProductos()
-      );
-    }
-    if (this.botonCerrarSesion) {
-      this.botonCerrarSesion.addEventListener("click", () => {
-        console.log("Cerrando sesion");
-        this.cerrarSesion() }
-      );
-    }
+      this.buscador?.addEventListener("input", () => this.filtrarProductos());
+      this.filtroCategoria?.addEventListener("change", () => this.filtrarProductos());
+      this.botonCerrarSesion?.addEventListener("click", () => cerrarSesion());
   }
 }
 
