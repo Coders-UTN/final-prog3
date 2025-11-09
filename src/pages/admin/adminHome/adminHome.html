@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Admin</title>
+    <link rel="stylesheet" href="../categories/categories.css" />
+    <link rel="stylesheet" href="adminHome.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="contenedor-principal">
+      <aside class="barra-lateral">
+        <div class="encabezado-admin">Administración</div>
+        <div class="info-panel">Panel de control</div>
+
+        <nav class="menu">
+          <a href="./dashboard.html" class="item-menu activo">
+            <i class="fas fa-tachometer-alt"></i> Dashboard
+          </a>
+          <a href="../categories/categories.html" class="item-menu">
+            <i class="fas fa-tags"></i> Categorias
+          </a>
+          <a href="../products/products.html" class="item-menu">
+            <i class="fas fa-box"></i> Productos
+          </a>
+          <a href="/src/pages/admin/orders/orders.html" class="item-menu">
+            <i class="fas fa-receipt"></i> Pedidos
+          </a>
+        </nav>
+      </aside>
+
+      <main class="area-contenido">
+        <header class="navegacion-superior">
+          <div class="logo-app"><i class="fas fa-utensils"></i> Food Store</div>
+          <div class="acciones-usuario">
+            <a
+              href="/src/pages/store/home/home.html"
+              class="enlace-nav"
+              target="_blank"
+            >
+              <i class="fas fa-store"></i> Ver Tienda
+            </a>
+            <span class="texto-nav">Panel Admin</span>
+            <button class="btn-cerrar-sesion" id="boton-cerrar-sesion">
+              Cerrar Sesión
+            </button>
+          </div>
+        </header>
+
+        <div class="contenido-pagina">
+          <div class="fila-encabezado">
+            <h2>Dashboard</h2>
+          </div>
+
+          <div class="grid-stats">
+            <div class="stat-card">
+              <div class="stat-info">
+                <span class="stat-titulo">Pedidos (Hoy)</span>
+                <span class="stat-numero" id="stat-pedidos-hoy">0</span>
+              </div>
+              <i class="fas fa-receipt stat-icono icono-pedidos"></i>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-info">
+                <span class="stat-titulo">Ingresos (Mes)</span>
+                <span class="stat-numero" id="stat-ingresos-mes">$0</span>
+              </div>
+              <i class="fas fa-dollar-sign stat-icono icono-ingresos"></i>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-info">
+                <span class="stat-titulo">Clientes Totales</span>
+                <span class="stat-numero" id="stat-clientes">0</span>
+              </div>
+              <i class="fas fa-users stat-icono icono-clientes"></i>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-info">
+                <span class="stat-titulo">Productos Activos</span>
+                <span class="stat-numero" id="stat-productos">0</span>
+              </div>
+              <i class="fas fa-box stat-icono icono-productos"></i>
+            </div>
+          </div>
+
+          <div class="grid-actividad">
+            <div class="tarjeta">
+              <h3>Pedidos Recientes</h3>
+              <table class="tabla-simple">
+                <thead>
+                  <tr>
+                    <th>ID Pedido</th>
+                    <th>Cliente</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                  </tr>
+                </thead>
+                <tbody id="lista-pedidos-recientes">
+                  <tr>
+                    <td colspan="4">Cargando...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="tarjeta">
+              <h3>Acciones Rápidas</h3>
+              <div class="acciones-rapidas">
+                <a href="../products/products.html" class="btn-accion-rapida">
+                  <i class="fas fa-plus"></i> Nuevo Producto
+                </a>
+                <a
+                  href="../categories/categories.html"
+                  class="btn-accion-rapida"
+                >
+                  <i class="fas fa-tags"></i> Gestionar Categorías
+                </a>
+                <a href="../orders/orders.html" class="btn-accion-rapida">
+                  <i class="fas fa-receipt"></i> Ver Todos los Pedidos
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+  <script type="module" src="./adminHome.ts"></script>
+</html>
