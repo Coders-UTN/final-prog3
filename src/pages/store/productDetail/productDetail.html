@@ -9,7 +9,6 @@
 </head>
 <body>
     <div class="contenedor-principal">
-        <!-- Header -->
         <header class="navegacion-superior">
             <div class="logo-app">
                 <i class="fas fa-utensils"></i> Food Store
@@ -23,30 +22,25 @@
                     <span class="contador-carrito" id="contador-carrito-header">0</span>
                 </a>
                 <span class="texto-nav" id="nombre-usuario">Bienvenido</span>
-                <button class="btn-cerrar-sesion" onclick="productDetailApp.cerrarSesion()">
+                <button class="btn-cerrar-sesion" id="btn-cerrar-sesion">
                     Cerrar Sesión
                 </button>
             </div>
         </header>
 
-        <!-- Contenido Principal -->
         <main class="contenido-detalle">
             <div class="detalle-producto" id="detalle-producto">
-                <!-- El producto se cargará aquí dinámicamente -->
                 <div class="estado-carga">Cargando producto...</div>
             </div>
 
-            <!-- Productos Relacionados -->
             <section class="productos-relacionados" id="productos-relacionados">
                 <h3>Productos Relacionados</h3>
                 <div class="grid-relacionados" id="grid-relacionados">
-                    <!-- Productos relacionados se cargarán aquí -->
-                </div>
+                    </div>
             </section>
         </main>
     </div>
 
-    <!-- Modal de confirmación -->
     <div id="modal-agregado" class="modal-fondo">
         <div class="modal-contenido modal-pequeno">
             <div class="modal-encabezado">
@@ -55,10 +49,10 @@
             <div class="modal-cuerpo">
                 <p>El producto se ha agregado correctamente al carrito.</p>
                 <div class="modal-acciones">
-                    <button type="button" class="btn-seguir-comprando" onclick="productDetailApp.cerrarModal()">
+                    <button type="button" class="btn-seguir-comprando" id="btn-modal-seguir">
                         Seguir Comprando
                     </button>
-                    <button type="button" class="btn-ver-carrito" onclick="productDetailApp.irAlCarrito()">
+                    <button type="button" class="btn-ver-carrito" id="btn-modal-carrito">
                         Ver Carrito
                     </button>
                 </div>
@@ -66,6 +60,6 @@
         </div>
     </div>
 
-    <script src="./productDetail.ts"></script>
+    <script type="module" src="./productDetail.ts"></script>
 </body>
 </html>
