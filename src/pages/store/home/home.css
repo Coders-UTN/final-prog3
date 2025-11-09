@@ -253,6 +253,10 @@ body {
     border-radius: 8px;
 }
 
+.oculto{
+    display: none;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .navegacion-superior {

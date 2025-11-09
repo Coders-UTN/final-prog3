@@ -1,163 +1,163 @@
+import type { ICategoria } from "../../../types/ICategoria";
+import type { IProducto } from "../../../types/IProduct";
+import { isAdminUser, isLoggedIn } from "../../../utils/auth";
+
 // --- URLs - Usa los endpoints que YA TIENES ---
-const API_BASE_URL_PRODUCTOS = 'http://localhost:8080/api/productos';
-const API_BASE_URL_CATEGORIAS = 'http://localhost:8080/api/categorias';
-
-interface Producto {
-    id: number;
-    nombre: string;
-    descripcion: string;
-    precio: number;
-    stock: number;
-    imagen: string;
-    categoriaId: number;
-    categoriaNombre?: string;
-}
-
-interface Categoria {
-    id: number;
-    nombre: string;
-    descripcion: string;
-}
+const API_BASE_URL_PRODUCTOS = "http://localhost:8080/api/productos";
+const API_BASE_URL_CATEGORIAS = "http://localhost:8080/api/categorias";
 
 // --- Clase Principal HomeApp ---
 class HomeApp {
-    productos: Producto[] = [];
-    categorias: Categoria[] = [];
-    productosFiltrados: Producto[] = [];
+  productos: IProducto[] = [];
+  categorias: ICategoria[] = [];
+  productosFiltrados: IProducto[] = [];
+  gridProductos: HTMLElement | null;
+  buscador: HTMLInputElement | null;
+  filtroCategoria: HTMLSelectElement | null;
+  contadorCarrito: HTMLElement | null;
+  linkAdmin: HTMLLinkElement | null;
+  botonCerrarSesion: HTMLButtonElement | null;
 
-    gridProductos: HTMLElement | null;
-    buscador: HTMLInputElement | null;
-    filtroCategoria: HTMLSelectElement | null;
-    contadorCarrito: HTMLElement | null;
+  constructor() {
+    console.log("Home App cargada.");
 
-    constructor() {
-        console.log('Home App cargada.');
-        
-        this.gridProductos = document.getElementById('grid-productos');
-        this.buscador = document.getElementById('buscador-productos') as HTMLInputElement;
-        this.filtroCategoria = document.getElementById('filtro-categoria') as HTMLSelectElement;
-        this.contadorCarrito = document.getElementById('contador-carrito-header');
+    this.gridProductos = document.getElementById("grid-productos");
+    this.buscador = document.getElementById(
+      "buscador-productos"
+    ) as HTMLInputElement;
+    this.filtroCategoria = document.getElementById(
+      "filtro-categoria"
+    ) as HTMLSelectElement;
+    this.contadorCarrito = document.getElementById("contador-carrito-header");
+    this.linkAdmin = document.getElementById("link-admin") as HTMLLinkElement;
+    this.botonCerrarSesion = document.getElementById("btn-cerrar-sesion") as HTMLButtonElement;
+  }
 
-        this.inicializarApp();
-        this.adjuntarEventos();
+  // --- Inicialización ---
+  async inicializarApp(): Promise<void> {
+    this.adjuntarEventos()
+    await this.verificarAutenticacion();
+    await this.cargarCategorias();
+    await this.cargarProductos();
+    this.actualizarContadorCarrito();
+  }
+
+  async verificarAutenticacion(): Promise<void> {
+    const estaLogueado = isLoggedIn();
+
+    if (estaLogueado) {
+      const usuario = this.getUsuarioLogueado();
+      this.actualizarNombreUsuario(usuario.nombre);
+      const esAdmin = isAdminUser();
+      if (esAdmin && this.linkAdmin) {
+        this.linkAdmin.classList.remove("oculto");
+      }
     }
+  }
 
-    // --- Inicialización ---
-    async inicializarApp(): Promise<void> {
-        await this.verificarAutenticacion();
-        await this.cargarCategorias();
-        await this.cargarProductos();
-        this.actualizarContadorCarrito();
+  getUsuarioLogueado(): any {
+    const userData = localStorage.getItem("food_store_user");
+    return userData ? JSON.parse(userData) : null;
+  }
+
+  actualizarNombreUsuario(nombre: string): void {
+    const elementoUsuario = document.getElementById("nombre-usuario");
+    if (elementoUsuario) {
+      elementoUsuario.textContent = `Bienvenido, ${nombre}`;
     }
+  }
 
-    async verificarAutenticacion(): Promise<void> {
-        const usuario = this.getUsuarioLogueado();
-        if (!usuario) {
-            window.location.href = '../../login/login.html';
-            return;
-        }
-        this.actualizarNombreUsuario(usuario.nombre);
-    }
-
-    getUsuarioLogueado(): any {
-        const userData = localStorage.getItem('food_store_user');
-        return userData ? JSON.parse(userData) : null;
-    }
-
-    actualizarNombreUsuario(nombre: string): void {
-        const elementoUsuario = document.getElementById('nombre-usuario');
-        if (elementoUsuario) {
-            elementoUsuario.textContent = `Bienvenido, ${nombre}`;
-        }
-    }
-
-    // --- Carga de Datos - LLAMANDO TUS ENDPOINTS EXISTENTES ---
-    async cargarCategorias(): Promise<void> {
-        try {
-            const response = await fetch(API_BASE_URL_CATEGORIAS);
-            if (!response.ok) throw new Error('Error al cargar categorías');
-            
-            this.categorias = await response.json();
-            this.llenarFiltroCategorias();
-        } catch (error) {
-            console.error('Error cargando categorías:', error);
-        }
-    }
-
-    async cargarProductos(): Promise<void> {
-    console.log('🔄 cargarProductos() ejecutándose...');
-    
+  // --- Carga de Datos - LLAMANDO TUS ENDPOINTS EXISTENTES ---
+  async cargarCategorias(): Promise<void> {
     try {
-        // NO mostrar "Cargando..." si ya hay productos
-        if (this.productos.length === 0 && this.gridProductos) {
-            this.gridProductos.innerHTML = '<div class="estado-carga">Cargando productos...</div>';
-        }
+      const response = await fetch(API_BASE_URL_CATEGORIAS);
+      if (!response.ok) throw new Error("Error al cargar categorías");
 
-        const response = await fetch(API_BASE_URL_PRODUCTOS);
-        if (!response.ok) throw new Error(`Error: ${response.status}`);
-        
-        this.productos = await response.json();
-        this.productosFiltrados = [...this.productos];
-        
-        console.log(`✅ Productos cargados: ${this.productos.length}`);
-        this.renderizarProductos();
-        
+      this.categorias = await response.json();
+      this.llenarFiltroCategorias();
     } catch (error) {
-        console.error('❌ Error cargando productos:', error);
-        if (this.gridProductos) {
-            this.gridProductos.innerHTML = '<div class="estado-error">Error al cargar los productos</div>';
-        }
+      console.error("Error cargando categorías:", error);
     }
-}
+  }
 
-    // --- Renderizado ---
-    llenarFiltroCategorias(): void {
-        if (!this.filtroCategoria) return;
+  async cargarProductos(): Promise<void> {
+    console.log("🔄 cargarProductos() ejecutándose...");
 
-        this.filtroCategoria.innerHTML = '<option value="">Todas las categorías</option>';
-        this.categorias.forEach(categoria => {
-            const option = document.createElement('option');
-            option.value = categoria.id.toString();
-            option.textContent = categoria.nombre;
-            this.filtroCategoria!.appendChild(option);
-        });
+    try {
+      // NO mostrar "Cargando..." si ya hay productos
+      if (this.productos.length === 0 && this.gridProductos) {
+        this.gridProductos.innerHTML =
+          '<div class="estado-carga">Cargando productos...</div>';
+      }
+
+      const response = await fetch(API_BASE_URL_PRODUCTOS);
+      if (!response.ok) throw new Error(`Error: ${response.status}`);
+
+      this.productos = await response.json();
+      this.productosFiltrados = [...this.productos];
+
+      console.log(`✅ Productos cargados: ${this.productos.length}`);
+      this.renderizarProductos();
+    } catch (error) {
+      console.error("❌ Error cargando productos:", error);
+      if (this.gridProductos) {
+        this.gridProductos.innerHTML =
+          '<div class="estado-error">Error al cargar los productos</div>';
+      }
     }
+  }
 
-    renderizarProductos(): void {
+  // --- Renderizado ---
+  llenarFiltroCategorias(): void {
+    if (!this.filtroCategoria) return;
+
+    this.filtroCategoria.innerHTML =
+      '<option value="">Todas las categorías</option>';
+    this.categorias.forEach((categoria) => {
+      const option = document.createElement("option");
+      option.value = categoria.id.toString();
+      option.textContent = categoria.nombre;
+      this.filtroCategoria!.appendChild(option);
+    });
+  }
+
+  renderizarProductos(): void {
     if (!this.gridProductos) return;
 
-    console.log('🎨 Renderizando productos...');
-    
+    console.log("🎨 Renderizando productos...");
+
     // Limpiar solo una vez
-    this.gridProductos.innerHTML = '';
+    this.gridProductos.innerHTML = "";
 
     if (this.productosFiltrados.length === 0) {
-        this.gridProductos.innerHTML = '<div class="estado-carga">No se encontraron productos</div>';
-        return;
+      this.gridProductos.innerHTML =
+        '<div class="estado-carga">No se encontraron productos</div>';
+      return;
     }
 
     // Usar DocumentFragment para renderizado más rápido
     const fragment = document.createDocumentFragment();
-    
-    this.productosFiltrados.forEach(producto => {
-        const tarjeta = this.crearTarjetaProducto(producto);
-        fragment.appendChild(tarjeta);
+
+    this.productosFiltrados.forEach((producto) => {
+      const tarjeta = this.crearTarjetaProducto(producto);
+      fragment.appendChild(tarjeta);
     });
 
     this.gridProductos.appendChild(fragment);
-    console.log('✅ Productos renderizados');
-}
+    console.log("✅ Productos renderizados");
+  }
 
-    crearTarjetaProducto(producto: Producto): HTMLElement {
-    const tarjeta = document.createElement('div');
-    tarjeta.className = 'tarjeta-producto';
-    
-    const stockClass = producto.stock < 10 ? 'stock bajo' : 'stock';
-    const stockText = producto.stock > 0 ? `${producto.stock} disponibles` : 'Agotado';
-    
+  crearTarjetaProducto(producto: IProducto): HTMLElement {
+    const tarjeta = document.createElement("div");
+    tarjeta.className = "tarjeta-producto";
+
+    const stockClass = producto.stock < 10 ? "stock bajo" : "stock";
+    const stockText =
+      producto.stock > 0 ? `${producto.stock} disponibles` : "Agotado";
+
     // Imagen con preload y manejo de errores mejorado
-    const imagenUrl = producto.imagen || '/img/placeholder.jpg';
-    
+    const imagenUrl = producto.imagen || "/img/placeholder.jpg";
+
     tarjeta.innerHTML = `
         <div class="contenedor-imagen">
             <img src="${imagenUrl}" 
@@ -173,68 +173,85 @@ class HomeApp {
                 <span class="precio">$${producto.precio.toFixed(2)}</span>
                 <span class="${stockClass}">${stockText}</span>
             </div>
-            <button class="btn-ver-detalle" onclick="homeApp.verDetalleProducto(${producto.id})">
+            <button class="btn-ver-detalle">
                 Ver Detalle
             </button>
         </div>
     `;
+    const botonDetalle = tarjeta.querySelector('.btn-ver-detalle') as HTMLButtonElement;
+
+        if (botonDetalle) {
+            botonDetalle.addEventListener('click', () => {
+                this.verDetalleProducto(producto.id);
+            });
+        }
 
     return tarjeta;
-}
+  }
 
-    // --- Filtros y Búsqueda ---
-    filtrarProductos(): void {
-        const textoBusqueda = this.buscador?.value.toLowerCase() || '';
-        const categoriaId = this.filtroCategoria?.value || '';
+  // --- Filtros y Búsqueda ---
+  filtrarProductos(): void {
+    const textoBusqueda = this.buscador?.value.toLowerCase() || "";
+    const categoriaId = this.filtroCategoria?.value || "";
 
-        this.productosFiltrados = this.productos.filter(producto => {
-            const coincideTexto = producto.nombre.toLowerCase().includes(textoBusqueda) ||
-                                producto.descripcion.toLowerCase().includes(textoBusqueda);
-            
-            const coincideCategoria = !categoriaId || producto.categoriaId.toString() === categoriaId;
-            
-            return coincideTexto && coincideCategoria;
-        });
+    this.productosFiltrados = this.productos.filter((producto) => {
+      const coincideTexto =
+        producto.nombre.toLowerCase().includes(textoBusqueda) ||
+        producto.descripcion.toLowerCase().includes(textoBusqueda);
 
-        this.renderizarProductos();
+      const coincideCategoria =
+        !categoriaId || producto.categoriaid.toString() === categoriaId;
+
+      return coincideTexto && coincideCategoria;
+    });
+
+    this.renderizarProductos();
+  }
+
+  // --- Navegación ---
+  verDetalleProducto(id: number): void {
+    window.location.href = `../productDetail/productDetail.html?id=${id}`;
+  }
+
+  actualizarContadorCarrito(): void {
+    if (!this.contadorCarrito) return;
+
+    const carrito = this.getCarrito();
+    const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+    this.contadorCarrito.textContent = totalItems.toString();
+  }
+
+  getCarrito(): any[] {
+    const carrito = localStorage.getItem("carrito");
+    return carrito ? JSON.parse(carrito) : [];
+  }
+  cerrarSesion(): void {
+    if (confirm("¿Estás seguro de que deseas cerrar sesión?")) {
+      localStorage.removeItem("food_store_user");
+      window.location.href = "../../login/login.html";
+    }
+  }
+
+  // --- Eventos ---
+  adjuntarEventos(): void {
+    if (this.buscador) {
+      this.buscador.addEventListener("input", () => this.filtrarProductos());
     }
 
-    // --- Navegación ---
-    verDetalleProducto(id: number): void {
-        window.location.href = `../productDetail/productDetail.html?id=${id}`;
+    if (this.filtroCategoria) {
+      this.filtroCategoria.addEventListener("change", () =>
+        this.filtrarProductos()
+      );
     }
-
-    actualizarContadorCarrito(): void {
-        if (!this.contadorCarrito) return;
-        
-        const carrito = this.getCarrito();
-        const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
-        this.contadorCarrito.textContent = totalItems.toString();
+    if (this.botonCerrarSesion) {
+      this.botonCerrarSesion.addEventListener("click", () => {
+        console.log("Cerrando sesion");
+        this.cerrarSesion() }
+      );
     }
-
-    getCarrito(): any[] {
-        const carrito = localStorage.getItem('carrito');
-        return carrito ? JSON.parse(carrito) : [];
-    }
-
-    // --- Eventos ---
-    adjuntarEventos(): void {
-        if (this.buscador) {
-            this.buscador.addEventListener('input', () => this.filtrarProductos());
-        }
-
-        if (this.filtroCategoria) {
-            this.filtroCategoria.addEventListener('change', () => this.filtrarProductos());
-        }
-    }
-
-    cerrarSesion(): void {
-        if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-            localStorage.removeItem('food_store_user');
-            window.location.href = '../../login/login.html';
-        }
-    }
+  }
 }
 
 // Inicialización
 const homeApp = new HomeApp();
+homeApp.inicializarApp();
