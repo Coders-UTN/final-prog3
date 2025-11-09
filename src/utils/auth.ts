@@ -1,6 +1,6 @@
 // auth.ts
 
-import { type IUser } from "../types/IUser";
+import type { IUser, Rol } from "../types/IUser";
 import type { IUserData } from "../types/IUserData";
 
 // La URL base de tu backend Spring Boot
@@ -58,47 +58,42 @@ export const login = async (credentials: any): Promise<IUser> => {
  * Verifica si el usuario tiene un token de sesión válido almacenado.
  * Se asume que el token y datos del usuario están en localStorage bajo la clave 'user_data'.
  */
-export const isLoggedIn = async (): Promise<boolean> => {
-    // 1. Obtener los datos del usuario almacenados en localStorage
-    const storedUser = localStorage.getItem('user_data');
+export const isLoggedIn =  (): IUser | null => {
+    const storedUser = localStorage.getItem('food_store_user');
+    if (!storedUser) {
+        return null;
+    }
+
+    const user:IUser = JSON.parse(storedUser);
+
+    const usuario: Rol = "USUARIO";
+    const admin: Rol = "ADMIN"
+   if ( user.activo && (user.rol == usuario || user.rol == admin) ) {
+        return user;
+    }
+    
+    return null;
+};
+
+export const isAdminUser = (): boolean => {
+      const storedUser = localStorage.getItem('food_store_user');
     if (!storedUser) {
         return false;
     }
+
+    const user:IUser = JSON.parse(storedUser);
+
+    const admin: Rol = "ADMIN"
+   if ( user.activo && user.rol == admin )  {
+        return true
+    }
     
-    let token: string;
-    try {
-        // Asumimos que los datos parseados tienen una propiedad 'token'
-        const userData: IUser = JSON.parse(storedUser); 
-        if (!userData.token) { 
-            return false;
-        }
-        token = userData.token;
-    } catch (e) {
-        // Fallo al parsear el JSON
-        return false; 
+    return false;
+}
+
+export const cerrarSesion = ():void =>{
+    if (confirm("¿Estás seguro de que deseas cerrar sesión?")) {
+      localStorage.removeItem("food_store_user");
+      window.location.href = "/src/pages/store/home/home.html";
     }
-
-    // 2. Si no hay token, no está logueado
-    if (!token) {
-        return false;
-    }
-
-    // 3. Validar el token contra el servidor (Backend Spring Boot)
-    try {
-        // El backend debe tener un endpoint '/validate' para verificar el JWT
-        const response = await fetch(`${API_URL}/validate`, { 
-            method: 'POST',
-            headers: {
-                // Envía el token en el encabezado Authorization
-                'Authorization': `Bearer ${token}` 
-            }
-        });
-
-        // El backend devuelve 200 OK si el token es válido
-        return response.ok; 
-
-    } catch (error) {
-        console.error("Error de red durante la validación del token:", error);
-        return false;
-    }
-};
+  }
