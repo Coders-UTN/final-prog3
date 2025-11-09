@@ -253,8 +253,14 @@ body {
     border-radius: 8px;
 }
 
-.oculto{
-    display: none;
+.oculto {
+    display: none !important; 
+}
+
+.info-usuario {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem; 
 }
 
 /* Responsive */

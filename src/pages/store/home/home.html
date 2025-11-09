@@ -15,16 +15,24 @@
                 <i class="fas fa-utensils"></i> Food Store
             </div>
             <div class="acciones-usuario">
-                <a href="/src/pages/client/orders/orders.html" class="enlace-nav" id="link-pedidos">Mis Pedidos</a>
-                <a href="/src/pages/admin/adminHome/adminHome.html" class="enlace-nav oculto" id="link-admin">Panel Admin</a>
                 <a href="../cart/cart.html" class="enlace-nav carrito-link">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="contador-carrito" id="contador-carrito-header">0</span>
                 </a>
-                <span class="texto-nav" id="nombre-usuario">Bienvenido</span>
-                <button class="btn-cerrar-sesion" id="btn-cerrar-sesion">
-                    Cerrar Sesión
-                </button>
+                <a href="/src/pages/admin/dashboard.html" class="enlace-nav oculto" id="link-admin">
+                    <i class="fas fa-cog"></i> Panel Admin
+                </a>
+                <div id="info-usuario" class="info-usuario oculto">
+                    <a href="/src/pages/client/orders/orders.html" class="enlace-nav" id="link-pedidos">Mis Pedidos</a>
+                    <span class="texto-nav" id="nombre-usuario"></span>
+                    <button class="btn-cerrar-sesion" id="btn-cerrar-sesion">
+                        Cerrar Sesión
+                    </button>
+                </div>
+
+                <a href="/src/pages/auth/login/login.html" class="enlace-nav" id="link-login">
+                    <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                </a>
             </div>
         </header>
 

@@ -17,6 +17,10 @@ class HomeApp {
   contadorCarrito: HTMLElement | null;
   linkAdmin: HTMLLinkElement | null;
   botonCerrarSesion: HTMLButtonElement | null;
+  infoUsuarioContenedor: HTMLDivElement | null;
+  linkLogin: HTMLAnchorElement | null;
+  linkPedidos: HTMLAnchorElement | null;
+
 
   constructor() {
     console.log("Home App cargada.");
@@ -30,28 +34,42 @@ class HomeApp {
     ) as HTMLSelectElement;
     this.contadorCarrito = document.getElementById("contador-carrito-header");
     this.linkAdmin = document.getElementById("link-admin") as HTMLLinkElement;
-    this.botonCerrarSesion = document.getElementById("btn-cerrar-sesion") as HTMLButtonElement;
+    this.botonCerrarSesion = document.getElementById(
+      "btn-cerrar-sesion"
+    ) as HTMLButtonElement;
+    this.infoUsuarioContenedor = document.getElementById(
+      "info-usuario"
+    ) as HTMLDivElement;
+    this.linkLogin = document.getElementById("link-login") as HTMLAnchorElement;
+    this.linkPedidos = document.getElementById('link-pedidos') as HTMLAnchorElement;
   }
 
   // --- Inicialización ---
   async inicializarApp(): Promise<void> {
-    this.adjuntarEventos()
+    this.adjuntarEventos();
     await this.verificarAutenticacion();
     await this.cargarCategorias();
     await this.cargarProductos();
     this.actualizarContadorCarrito();
   }
 
-  async verificarAutenticacion(): Promise<void> {
-    const estaLogueado = isLoggedIn();
-
-    if (estaLogueado) {
+  verificarAutenticacion(): void {
+    if (isLoggedIn()) {
       const usuario = this.getUsuarioLogueado();
+      if (!usuario) return;
+
+      this.infoUsuarioContenedor?.classList.remove("oculto");
+      this.linkLogin?.classList.add("oculto");
       this.actualizarNombreUsuario(usuario.nombre);
-      const esAdmin = isAdminUser();
-      if (esAdmin && this.linkAdmin) {
+
+      if (isAdminUser() && this.linkAdmin) {
         this.linkAdmin.classList.remove("oculto");
+        this.linkPedidos?.classList.add("oculto");
+
       }
+    } else {
+      this.infoUsuarioContenedor?.classList.add("oculto");
+      this.linkLogin?.classList.remove("oculto");
     }
   }
 
@@ -178,13 +196,15 @@ class HomeApp {
             </button>
         </div>
     `;
-    const botonDetalle = tarjeta.querySelector('.btn-ver-detalle') as HTMLButtonElement;
+    const botonDetalle = tarjeta.querySelector(
+      ".btn-ver-detalle"
+    ) as HTMLButtonElement;
 
-        if (botonDetalle) {
-            botonDetalle.addEventListener('click', () => {
-                this.verDetalleProducto(producto.id);
-            });
-        }
+    if (botonDetalle) {
+      botonDetalle.addEventListener("click", () => {
+        this.verDetalleProducto(producto.id);
+      });
+    }
 
     return tarjeta;
   }
@@ -228,10 +248,11 @@ class HomeApp {
 
   // --- Eventos ---
   adjuntarEventos(): void {
-
-      this.buscador?.addEventListener("input", () => this.filtrarProductos());
-      this.filtroCategoria?.addEventListener("change", () => this.filtrarProductos());
-      this.botonCerrarSesion?.addEventListener("click", () => cerrarSesion());
+    this.buscador?.addEventListener("input", () => this.filtrarProductos());
+    this.filtroCategoria?.addEventListener("change", () =>
+      this.filtrarProductos()
+    );
+    this.botonCerrarSesion?.addEventListener("click", () => cerrarSesion());
   }
 }
 
