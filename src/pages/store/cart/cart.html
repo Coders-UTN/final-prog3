@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrito de Compras - Food Store</title>
     <link rel="stylesheet" href="./cart.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.css" />
 </head>
 <body>
     <div class="contenedor-principal">
-        <!-- Header -->
         <header class="navegacion-superior">
             <div class="logo-app">
                 <i class="fas fa-utensils"></i> Food Store
@@ -19,38 +18,26 @@
                     <i class="fas fa-store"></i> Seguir Comprando
                 </a>
                 <span class="texto-nav" id="nombre-usuario">Bienvenido</span>
-                <button class="btn-cerrar-sesion" onclick="cartApp.cerrarSesion()">
+                <button class="btn-cerrar-sesion" id="btn-cerrar-sesion">
                     Cerrar Sesión
                 </button>
             </div>
         </header>
 
-        <!-- Contenido Principal -->
         <main class="contenido-carrito">
             <div class="fila-encabezado">
                 <h1><i class="fas fa-shopping-cart"></i> Mi Carrito</h1>
-                <button class="btn-vaciar-carrito" onclick="cartApp.vaciarCarrito()">
+                <button class="btn-vaciar-carrito" id="btn-vaciar-carrito">
                     <i class="fas fa-trash"></i> Vaciar Carrito
                 </button>
             </div>
 
             <div class="contenedor-carrito">
-                <!-- Columna de Items del Carrito -->
                 <div class="columna-items">
                     <div id="lista-carrito">
-                        <!-- Los items del carrito se cargarán aquí -->
-                        <div class="carrito-vacio" id="carrito-vacio">
-                            <i class="fas fa-shopping-cart"></i>
-                            <h3>Tu carrito está vacío</h3>
-                            <p>Agrega algunos productos deliciosos</p>
-                            <a href="../home/home.html" class="btn-comenzar-comprar">
-                                <i class="fas fa-store"></i> Comenzar a Comprar
-                            </a>
                         </div>
-                    </div>
                 </div>
 
-                <!-- Columna de Resumen -->
                 <div class="columna-resumen">
                     <div class="tarjeta-resumen">
                         <h3>Resumen del Pedido</h3>
@@ -70,7 +57,7 @@
                             <span id="total">$0.00</span>
                         </div>
 
-                        <button class="btn-finalizar-compra" id="btn-finalizar" onclick="cartApp.finalizarCompra()">
+                        <button class="btn-finalizar-compra" id="btn-finalizar">
                             <i class="fas fa-credit-card"></i> Finalizar Compra
                         </button>
 
@@ -84,11 +71,11 @@
         </main>
     </div>
 
-    <!-- Modal de Confirmación de Compra -->
     <div id="modal-compra" class="modal-fondo">
         <div class="modal-contenido">
             <div class="modal-encabezado">
                 <h3><i class="fas fa-check-circle"></i> ¡Compra Exitosa!</h3>
+                <span class="modal-cerrar" title="Cerrar">×</span>
             </div>
             <div class="modal-cuerpo">
                 <div class="resumen-compra">
@@ -109,10 +96,10 @@
                     </div>
                 </div>
                 <div class="modal-acciones">
-                    <button type="button" class="btn-seguir-comprando" onclick="cartApp.seguirComprando()">
+                    <button type="button" class="btn-seguir-comprando" id="btn-seguir-comprando">
                         <i class="fas fa-store"></i> Seguir Comprando
                     </button>
-                    <button type="button" class="btn-ver-pedidos" onclick="cartApp.verPedidos()">
+                    <button type="button" class="btn-ver-pedidos" id="btn-ver-pedidos">
                         <i class="fas fa-list"></i> Ver Mis Pedidos
                     </button>
                 </div>
@@ -120,6 +107,6 @@
         </div>
     </div>
 
-    <script src="./cart.ts"></script>
+    <script type="module" src="./cart.ts"></script>
 </body>
 </html>
