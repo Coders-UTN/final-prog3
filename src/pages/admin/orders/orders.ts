@@ -1,7 +1,8 @@
 import * as OrderService from "../../../services/pedido.service";
-import type { IPedido } from "../../../types/IPedido";
+import type { IEstadoPedido, IPedido } from "../../../types/IPedido";
 import { cerrarSesion, isAdminUser } from "../../../utils/auth";
 import { navigateTo } from "../../../utils/navigate";
+const CANCELADO: IEstadoPedido = "CANCELADO";
 
 class ComponenteOrders {
   orders: IPedido[] = [];
@@ -11,6 +12,8 @@ class ComponenteOrders {
   listaItemsModal: HTMLElement | null;
   selectEstado: HTMLSelectElement | null;
   botonCerrarSesion: HTMLButtonElement | null;
+  direccionEnvioModal: HTMLElement | null;
+  btnGuardarEstado: HTMLButtonElement | null; // <-- AÑADE ESTA LÍNEA
 
   private idEnEdicion: number | null = null;
   private submitHandler: (e: Event) => void;
@@ -28,6 +31,12 @@ class ComponenteOrders {
     ) as HTMLButtonElement;
 
     this.submitHandler = this.manejarActualizarEstado.bind(this);
+    this.direccionEnvioModal = document.getElementById(
+      "direccion-envio-pedido"
+    );
+    this.btnGuardarEstado = document.getElementById(
+      "btn-guardar-estado"
+    ) as HTMLButtonElement;
   }
 
   async inicializarApp(): Promise<void> {
@@ -109,6 +118,11 @@ class ComponenteOrders {
       document.getElementById("modal-titulo-pedido") as HTMLElement
     ).textContent = `Detalle del Pedido #${pedido.id}`;
 
+    if (this.direccionEnvioModal) {
+      this.direccionEnvioModal.textContent = `Dirección: ${
+        pedido.direccionEnvio ? pedido.direccionEnvio : "Sin direccion de envio"
+      }`;
+    }
     this.listaItemsModal.innerHTML = "";
     pedido.detallePedidoDTO.forEach((item) => {
       const li = document.createElement("li");
@@ -130,11 +144,19 @@ class ComponenteOrders {
 
   async manejarActualizarEstado(): Promise<void> {
     if (!this.idEnEdicion || !this.selectEstado) return;
+    if (this.btnGuardarEstado) {
+      this.btnGuardarEstado.disabled = true;
+      this.btnGuardarEstado.textContent = "Actualizando...";
+    }
 
     const nuevoEstado = this.selectEstado.value;
 
     try {
-      await OrderService.updateOrderStatus(this.idEnEdicion, nuevoEstado);
+      if (nuevoEstado == CANCELADO) {
+        await OrderService.cancelOrder(this.idEnEdicion);
+      } else {
+        await OrderService.updateOrderStatus(this.idEnEdicion, nuevoEstado);
+      }
       await this.cargarPedidos();
       this.cerrarModal();
     } catch (error) {
@@ -144,6 +166,11 @@ class ComponenteOrders {
         mensajeError = error.message;
       }
       alert(mensajeError);
+    } finally {
+      if (this.btnGuardarEstado) {
+        this.btnGuardarEstado.disabled = false;
+        this.btnGuardarEstado.textContent = "Actualizar Estado";
+      }
     }
   }
 
@@ -175,5 +202,7 @@ class ComponenteOrders {
   }
 }
 
-const pedidosApp = new ComponenteOrders();
-pedidosApp.inicializarApp();
+document.addEventListener("DOMContentLoaded", () => {
+  const pedidosApp = new ComponenteOrders();
+  pedidosApp.inicializarApp();
+});

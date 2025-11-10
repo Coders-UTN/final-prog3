@@ -20,6 +20,7 @@ class HomeApp {
   infoUsuarioContenedor: HTMLDivElement | null;
   linkLogin: HTMLAnchorElement | null;
   linkPedidos: HTMLAnchorElement | null;
+  linkProfile: HTMLAnchorElement | null;
 
 
   constructor() {
@@ -42,6 +43,7 @@ class HomeApp {
     ) as HTMLDivElement;
     this.linkLogin = document.getElementById("link-login") as HTMLAnchorElement;
     this.linkPedidos = document.getElementById('link-pedidos') as HTMLAnchorElement;
+    this.linkProfile = document.getElementById('link-profile') as HTMLAnchorElement;
   }
 
   // --- Inicialización ---
@@ -102,7 +104,6 @@ class HomeApp {
     console.log("🔄 cargarProductos() ejecutándose...");
 
     try {
-      // NO mostrar "Cargando..." si ya hay productos
       if (this.productos.length === 0 && this.gridProductos) {
         this.gridProductos.innerHTML =
           '<div class="estado-carga">Cargando productos...</div>';
@@ -125,7 +126,7 @@ class HomeApp {
     }
   }
 
-  // --- Renderizado ---
+  // --- Renderizdo ---
   llenarFiltroCategorias(): void {
     if (!this.filtroCategoria) return;
 
@@ -144,7 +145,6 @@ class HomeApp {
 
     console.log("🎨 Renderizando productos...");
 
-    // Limpiar solo una vez
     this.gridProductos.innerHTML = "";
 
     if (this.productosFiltrados.length === 0) {
@@ -153,7 +153,6 @@ class HomeApp {
       return;
     }
 
-    // Usar DocumentFragment para renderizado más rápido
     const fragment = document.createDocumentFragment();
 
     this.productosFiltrados.forEach((producto) => {
@@ -168,12 +167,13 @@ class HomeApp {
   crearTarjetaProducto(producto: IProducto): HTMLElement {
     const tarjeta = document.createElement("div");
     tarjeta.className = "tarjeta-producto";
+    tarjeta.style.cursor = "pointer";
+    tarjeta.title = "Click para ver detalle"
 
     const stockClass = producto.stock < 10 ? "stock bajo" : "stock";
     const stockText =
       producto.stock > 0 ? `${producto.stock} disponibles` : "Agotado";
 
-    // Imagen con preload y manejo de errores mejorado
     const imagenUrl = producto.imagen || "/img/placeholder.jpg";
 
     tarjeta.innerHTML = `
@@ -205,11 +205,13 @@ class HomeApp {
         this.verDetalleProducto(producto.id);
       });
     }
+    tarjeta.addEventListener("click", () => {
+      this.verDetalleProducto(producto.id);
+    });
 
     return tarjeta;
   }
 
-  // --- Filtros y Búsqueda ---
   filtrarProductos(): void {
     const textoBusqueda = this.buscador?.value.toLowerCase() || "";
     const categoriaId = this.filtroCategoria?.value || "";
@@ -228,7 +230,6 @@ class HomeApp {
     this.renderizarProductos();
   }
 
-  // --- Navegación ---
   verDetalleProducto(id: number): void {
     window.location.href = `../productDetail/productDetail.html?id=${id}`;
   }
