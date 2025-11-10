@@ -2,6 +2,8 @@ import * as CategoriaService from "../../../services/categories.service";
 import * as ProductoService from "../../../services/products.service";
 import type { ICategoria } from "../../../types/ICategoria";
 import type { ICreateProducto, IProducto } from "../../../types/IProduct";
+import { cerrarSesion } from "../../../utils/auth";
+
 const IMAGEN_DEFAULT = "/assets/img/generic-food.png";
 
 class ComponenteProductos {
@@ -11,6 +13,7 @@ class ComponenteProductos {
   modal: HTMLElement | null;
   formulario: HTMLFormElement | null;
   tablaCuerpo: HTMLElement | null;
+  botonCerrarSesion: HTMLButtonElement | null;
 
   private idEnEdicion: number | null = null;
   private submitHandler: (e: Event) => void;
@@ -22,8 +25,10 @@ class ComponenteProductos {
       "formulario-producto"
     ) as HTMLFormElement;
     this.tablaCuerpo = document.querySelector(".tarjeta table tbody");
-
     this.submitHandler = this.manejarSubmitGlobal.bind(this);
+    this.botonCerrarSesion = document.getElementById(
+      "boton-cerrar-sesion"
+    ) as HTMLButtonElement;
   }
 
   async inicializarApp(): Promise<void> {
@@ -212,12 +217,18 @@ class ComponenteProductos {
       (document.getElementById("categoria-producto") as HTMLSelectElement).value
     );
 
-    if ( isNaN(nuevoPrecio) || nuevoPrecio <= 0 || isNaN(nuevoStock) || nuevoStock < 0 || isNaN(nuevaCategoriaId) ) {
+    if (
+      isNaN(nuevoPrecio) ||
+      nuevoPrecio <= 0 ||
+      isNaN(nuevoStock) ||
+      nuevoStock < 0 ||
+      isNaN(nuevaCategoriaId)
+    ) {
       alert("Por favor, ingrese valores válidos.");
       return null;
     }
 
-		return {
+    return {
       nombre: (document.getElementById("nombre-producto") as HTMLInputElement)
         .value,
       descripcion: (
@@ -294,26 +305,23 @@ class ComponenteProductos {
 
   adjuntarEventosBase(): void {
     const newBtn = document.querySelector(".btn-nueva-categoria");
-    if (newBtn) {
-      newBtn.addEventListener("click", () => this.manejarNuevoProducto());
-    }
 
-    if (this.formulario) {
-      this.formulario.addEventListener("submit", this.submitHandler);
-    }
+    newBtn?.addEventListener("click", () => this.manejarNuevoProducto());
 
-    if (this.modal) {
-      this.modal.addEventListener("click", (e: Event) => {
-        if (e.target === this.modal) {
-          this.cerrarModal();
-        }
-      });
-    }
+    this.formulario?.addEventListener("submit", this.submitHandler);
+
+    this.modal?.addEventListener("click", (e: Event) => {
+      if (e.target === this.modal) {
+        this.cerrarModal();
+      }
+    });
     const closeBtn = document.querySelector(".modal-cerrar");
     closeBtn?.addEventListener("click", () => this.cerrarModal());
 
     const cancelBtn = document.querySelector(".btn-cancelar");
     cancelBtn?.addEventListener("click", () => this.cerrarModal());
+
+    this.botonCerrarSesion?.addEventListener("click", () => cerrarSesion());
   }
 }
 

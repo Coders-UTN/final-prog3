@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos - Food Store</title>
+    <link rel="stylesheet" href="./home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+<body>
+    <div class="contenedor-principal">
+        <!-- Header -->
+        <header class="navegacion-superior">
+            <div class="logo-app">
+                <i class="fas fa-utensils"></i> Food Store
+            </div>
+            <div class="acciones-usuario">
+                <a href="../cart/cart.html" class="enlace-nav carrito-link">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="contador-carrito" id="contador-carrito-header">0</span>
+                </a>
+                <a href="/src/pages/admin/dashboard.html" class="enlace-nav oculto" id="link-admin">
+                    <i class="fas fa-cog"></i> Panel Admin
+                </a>
+                <div id="info-usuario" class="info-usuario oculto">
+                    <a href="/src/pages/client/orders/orders.html" class="enlace-nav ot" id="link-pedidos"><i class="fa-solid fa-clipboard-check"></i> Mis Pedidos</a>
+                    <a href="/src/pages/client/profile/profile.html" class="enlace-nav" id="link-profile"><i class="fa-solid fa-user"></i> Mi perfil</a>
+                    <span class="texto-nav" id="nombre-usuario"></span>
+                    <button class="btn-cerrar-sesion" id="btn-cerrar-sesion">
+                        Cerrar Sesión
+                    </button>
+                </div>
+
+                <a href="/src/pages/auth/login/login.html" class="enlace-nav" id="link-login">
+                    <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                </a>
+            </div>
+        </header>
+
+        <!-- Contenido Principal -->
+        <main class="contenido-home">
+            <div class="fila-encabezado">
+                <h1>Nuestros Productos</h1>
+                <div class="controles-busqueda">
+                    <div class="buscador">
+                        <input type="text" id="buscador-productos" placeholder="Buscar productos...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <select id="filtro-categoria" class="filtro-categoria">
+                        <option value="">Todas las categorías</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Grid de Productos -->
+            <div class="grid-productos" id="grid-productos">
+                <!-- Los productos se cargarán aquí -->
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="./home.ts"></script>
+</body>
+</html>

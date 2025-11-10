@@ -1,105 +1,121 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Categorias</title>
-    <link rel="stylesheet" href="./categories.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-</head>
-<body>
+    <link rel="stylesheet" href="./categories.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+  </head>
+  <body>
     <div class="contenedor-principal">
-    <aside class="barra-lateral">
+      <aside class="barra-lateral">
         <div class="encabezado-admin">Administración</div>
         <div class="info-panel">Panel de control</div>
-        
-        <nav class="menu">
-            <a href="#" class="item-menu">
-                <i class="fas fa-tachometer-alt"></i> Dashboard
-            </a>
-            <a href="../categories/categories.html" class="item-menu activo">
-                <i class="fas fa-tags"></i> Categorias
-            </a>
-            <a href="../products/products.html" class="item-menu">
-                <i class="fas fa-box"></i> Productos
-            </a>
-            <a href="#" class="item-menu">
-                <i class="fas fa-receipt"></i> Pedidos
-            </a>
-            <a href="#" class="item-menu separador"></a>
-            <a href="#" class="item-menu">
-                <i class="fas fa-store"></i> Ver Tienda
-            </a>
-        </nav>
-    </aside>
 
-    <main class="area-contenido">
+        <nav class="menu">
+          <a href="/src/pages/admin/adminHome/adminHome.html" class="item-menu">
+            <i class="fas fa-tachometer-alt"></i> Dashboard
+          </a>
+          <a href="../categories/categories.html" class="item-menu activo">
+            <i class="fas fa-tags"></i> Categorias
+          </a>
+          <a href="../products/products.html" class="item-menu">
+            <i class="fas fa-box"></i> Productos
+          </a>
+          <a href="/src/pages/admin/orders/orders.html" class="item-menu">
+            <i class="fas fa-receipt"></i> Pedidos
+          </a>
+        </nav>
+      </aside>
+
+      <main class="area-contenido">
         <header class="navegacion-superior">
-            <div class="logo-app">
-                <i class="fas fa-utensils"></i> Food Store
-            </div>
-            <div class="acciones-usuario">
-                <a href="#" class="enlace-nav">Tienda</a>
-                <span class="texto-nav">Panel Admin | Juan Pérez</span>
-                <button class="btn-cerrar-sesion">Cerrar Sesión</button>
-            </div>
+          <div class="logo-app"><i class="fas fa-utensils"></i> Food Store</div>
+          <div class="acciones-usuario">
+            <a
+              href="/src/pages/store/home/home.html"
+              class="enlace-nav"
+              target="_blank"
+            >
+              <i class="fas fa-store"></i> Ver Tienda
+            </a>
+            <span class="texto-nav">Panel Admin </span>
+            <a
+              href="/src/pages/client/profile/profile.html"
+              class="enlace-nav"
+              target="_blank"
+              id="link-profile"
+              ><i class="fa-solid fa-user"></i> Perfil</a
+            >
+            <button class="btn-cerrar-sesion" id="boton-cerrar-sesion">
+              Cerrar Sesión
+            </button>
+          </div>
         </header>
 
         <div class="contenido-pagina">
-            <div class="fila-encabezado">
-                <h2>Gestión de Categorías</h2>
-                <button class="btn-nueva-categoria">
-                    <i class="fas fa-plus"></i> Nueva Categoría
-                </button>
-            </div>
+          <div class="fila-encabezado">
+            <h2>Gestión de Categorías</h2>
+            <button class="btn-nueva-categoria">
+              <i class="fas fa-plus"></i> Nueva Categoría
+            </button>
+          </div>
 
-            <div class="tarjeta">
-                <table>
-                    <thead>
-                        <tr class="cabecera-tabla">
-                            <th>ID</th>
-                            <th>Imagen</th>
-                            <th>Nombre</th>
-                            <th>Descripción</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            
-                        </tr>
-                        </tbody>
-                </table>
-            </div>
+          <div class="tarjeta">
+            <table>
+              <thead>
+                <tr class="cabecera-tabla">
+                  <th>ID</th>
+                  <th>Imagen</th>
+                  <th>Nombre</th>
+                  <th>Descripción</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-    </main>
-    <div id="modal-categoria" class="modal-fondo">
-    <div class="modal-contenido">
-        <div class="modal-encabezado">
+      </main>
+      <div id="modal-categoria" class="modal-fondo">
+        <div class="modal-contenido">
+          <div class="modal-encabezado">
             <h3>Nueva Categoría</h3>
             <span class="modal-cerrar">×</span>
-        </div>
-        <form id="formulario-categoria">
+          </div>
+          <form id="formulario-categoria">
             <div class="grupo-formulario">
-                <label for="nombre-categoria">Nombre:</label>
-                <input type="text" id="nombre-categoria" required>
+              <label for="nombre-categoria">Nombre:</label>
+              <input type="text" id="nombre-categoria" required />
             </div>
             <div class="grupo-formulario">
-                <label for="descripcion-categoria">Descripción:</label>
-                <textarea id="descripcion-categoria" required></textarea>
+              <label for="descripcion-categoria">Descripción:</label>
+              <textarea id="descripcion-categoria" required></textarea>
             </div>
             <div class="grupo-formulario">
-                <label for="imagen-categoria">URL de Imagen (o Archivo):</label>
-                <input type="text" id="imagen-categoria" placeholder="Dejalo vacio para usar una imagen generica">
-                </div>
+              <label for="imagen-categoria">URL de Imagen (o Archivo):</label>
+              <input
+                type="text"
+                id="imagen-categoria"
+                placeholder="Dejalo vacio para usar una imagen generica"
+              />
+            </div>
             <div class="modal-acciones">
-                <button type="submit" class="btn-guardar">Guardar Categoría</button>
-                <button type="button" class="btn-cancelar">Cancelar</button>
+              <button type="submit" class="btn-guardar">
+                Guardar Categoría
+              </button>
+              <button type="button" class="btn-cancelar">Cancelar</button>
             </div>
-        </form>
+          </form>
+        </div>
+      </div>
     </div>
-</div>
-</div>
-<script type="module" src="./categories.ts"></script>
-</body>
+    <script type="module" src="./categories.ts"></script>
+  </body>
 </html>

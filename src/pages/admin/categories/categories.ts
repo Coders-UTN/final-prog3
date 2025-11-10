@@ -1,5 +1,7 @@
 import { type ICategoria } from "../../../types/ICategoria";
 import * as CategoriaService from "../../../services/categories.service";
+import { cerrarSesion } from "../../../utils/auth";
+
 const IMAGEN_DEFAULT = "/assets/img/generic-category.png";
 
 class ComponenteCategorias {
@@ -8,6 +10,7 @@ class ComponenteCategorias {
   formulario: HTMLFormElement | null;
   tablaCuerpo: HTMLElement | null;
   idCategoriaEnEdicion: number | null = null;
+  botonCerrarSesion : HTMLButtonElement | null;
 
   constructor() {
     console.log("Componente de Categorías cargado.");
@@ -16,6 +19,8 @@ class ComponenteCategorias {
       "formulario-categoria"
     ) as HTMLFormElement;
     this.tablaCuerpo = document.querySelector(".tarjeta table tbody");
+    this.botonCerrarSesion = document.getElementById('boton-cerrar-sesion') as HTMLButtonElement;
+    
   }
 
   public async inicializar() {
@@ -183,6 +188,12 @@ class ComponenteCategorias {
       alert(mensajeError);
     }
   }
+    cerrarSesion(): void {
+    if (confirm("¿Estás seguro de que deseas cerrar sesión?")) {
+      localStorage.removeItem("food_store_user");
+      window.location.href = "../../login/login.html";
+    }
+  }
 
   adjuntarEventos(): void {
     const newBtn = document.querySelector(".btn-nueva-categoria");
@@ -198,6 +209,7 @@ class ComponenteCategorias {
     const closeBtn = document.querySelector(".modal-cerrar");
     const cancelBtn = document.querySelector(".btn-cancelar");
 
+    this.botonCerrarSesion?.addEventListener("click", () => cerrarSesion())
     cancelBtn?.addEventListener("click", () => this.cerrarModal());
     closeBtn?.addEventListener("click", () => this.cerrarModal());
   }

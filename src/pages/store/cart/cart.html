@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Carrito de Compras - Food Store</title>
+    <link rel="stylesheet" href="./cart.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.css"
+    />
+  </head>
+  <body>
+    <div class="contenedor-principal">
+      <header class="navegacion-superior">
+        <div class="logo-app"><i class="fas fa-utensils"></i> Food Store</div>
+        <div class="acciones-usuario">
+          <a href="/src/pages/store/home/home.html" class="enlace-nav">
+            <i class="fas fa-store"></i> Seguir Comprando
+          </a>
+          <a
+            href="/src/pages/client/orders/orders.html"
+            class="enlace-nav ot"
+            id="link-pedidos"
+            ><i class="fa-solid fa-clipboard-check"></i> Mis Pedidos</a
+          >
+          <a
+            href="/src/pages/client/profile/profile.html"
+            class="enlace-nav"
+            id="link-profile"
+            ><i class="fa-solid fa-user"></i> Mi perfil</a
+          >
+          <span class="texto-nav" id="nombre-usuario">Bienvenido</span>
+          <button class="btn-cerrar-sesion" id="btn-cerrar-sesion">
+            Cerrar Sesión
+          </button>
+        </div>
+      </header>
+
+      <main class="contenido-carrito">
+        <div class="fila-encabezado">
+          <h1><i class="fas fa-shopping-cart"></i> Mi Carrito</h1>
+          <button class="btn-vaciar-carrito" id="btn-vaciar-carrito">
+            <i class="fas fa-trash"></i> Vaciar Carrito
+          </button>
+        </div>
+
+        <div class="contenedor-carrito">
+          <div class="columna-items">
+            <div id="lista-carrito"></div>
+          </div>
+
+          <div class="columna-resumen">
+            <div class="tarjeta-resumen">
+              <h3>Resumen del Pedido</h3>
+
+              <div class="linea-resumen">
+                <span>Subtotal:</span>
+                <span id="subtotal">$0.00</span>
+              </div>
+
+              <div class="linea-resumen">
+                <span>Envío:</span>
+                <span id="envio">$0.00</span>
+              </div>
+
+              <div class="linea-resumen total">
+                <span>Total:</span>
+                <span id="total">$0.00</span>
+              </div>
+
+              <div class="grupo-formulario">
+                <label for="input-direccion">Dirección de Envío:</label>
+                <input
+                  type="text"
+                  id="input-direccion"
+                  class="input-direccion"
+                  placeholder="Ej: Calle Falsa 123, CABA"
+                  required
+                />
+              </div>
+
+              <button class="btn-finalizar-compra" id="btn-finalizar">
+                <i class="fas fa-credit-card"></i> Finalizar Compra
+              </button>
+
+              <div class="info-envio">
+                <i class="fas fa-truck"></i>
+                <span>Envío gratis en compras mayores a $15000</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div id="modal-compra" class="modal-fondo">
+      <div class="modal-contenido">
+        <div class="modal-encabezado">
+          <h3><i class="fas fa-check-circle"></i> ¡Compra Exitosa!</h3>
+          <span class="modal-cerrar" title="Cerrar">×</span>
+        </div>
+        <div class="modal-cuerpo">
+          <div class="resumen-compra">
+            <p>Tu pedido ha sido procesado correctamente.</p>
+            <div class="detalle-compra">
+              <div class="linea-detalle">
+                <span>Número de pedido:</span>
+                <span id="numero-pedido">#000001</span>
+              </div>
+              <div class="linea-detalle">
+                <span>Total:</span>
+                <span id="total-pedido">$0.00</span>
+              </div>
+              <div class="linea-detalle">
+                <span>Fecha estimada:</span>
+                <span id="fecha-entrega">--/--/----</span>
+              </div>
+            </div>
+          </div>
+          <div class="modal-acciones">
+            <button
+              type="button"
+              class="btn-seguir-comprando"
+              id="btn-seguir-comprando"
+            >
+              <i class="fas fa-store"></i> Seguir Comprando
+            </button>
+            <button type="button" class="btn-ver-pedidos" id="btn-ver-pedidos">
+              <i class="fas fa-list"></i> Ver Mis Pedidos
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./cart.ts"></script>
+  </body>
+</html>

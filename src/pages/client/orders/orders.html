@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mis pedidos</title>
+    <link rel="stylesheet" href="./orders.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+  </head>
+  <body>
+    <main class="pagina-pedidos">
+      <div class="pagina-contenedor">
+        <header class="encabezado">
+          <div class="encabezado__logo">
+            <i class="fas fa-utensils"></i> Food Store
+          </div>
+          <div class="encabezado__acciones">
+            <a
+              href="/src/pages/store/home/home.html"
+              class="encabezado__enlace-nav"
+              >Inicio</a
+            >
+
+            <a
+              href="/src/pages/store/cart/cart.html"
+              class="encabezado__enlace-nav encabezado__enlace-nav--carrito"
+            >
+              <i class="fas fa-shopping-cart"></i>
+              <span
+                class="encabezado__contador-carrito"
+                id="contador-carrito-header"
+                >0</span
+              >
+            </a>
+            <a
+              href="/src/pages/client/profile/profile.html"
+              class="encabezado__enlace-nav"
+              id="link-profile"
+              ><i class="fa-solid fa-user"></i> Mi perfil</a
+            >
+
+            <span class="encabezado__nombre-usuario" id="nombre-usuario"
+              >Bienvenido</span
+            >
+            <button class="encabezado__btn-salir" id="boton-cerrar-sesion">
+              Cerrar Sesión
+            </button>
+          </div>
+        </header>
+
+        <div class="pagina-pedidos__cabecera">
+          <h1 class="pagina-pedidos__titulo">Mis pedidos</h1>
+        </div>
+
+        <ul class="pagina-pedidos__lista" id="lista-pedidos"></ul>
+      </div>
+
+      <dialog class="modal-detalle" id="modal-detalle-pedido">
+        <div class="modal-detalle__header">
+          <h2 class="modal-detalle__titulo" id="modal-id-pedido"></h2>
+          <button class="modal-detalle__btn-cerrar" id="modal-btn-cerrar">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="modal-detalle__cuerpo">
+          <div class="modal-detalle__info">
+            <span id="modal-fecha"></span>
+            <span id="modal-estado"></span>
+          </div>
+          <h3>Productos</h3>
+          <ul
+            class="modal-detalle__lista-productos"
+            id="modal-lista-productos"
+          ></ul>
+        </div>
+
+        <div class="modal-detalle__footer">
+          <span class="modal-detalle__total-etiqueta">Total:</span>
+          <span class="modal-detalle__total-monto" id="modal-total"></span>
+        </div>
+      </dialog>
+    </main>
+    <script type="module" src="./orders.ts"></script>
+  </body>
+</html>

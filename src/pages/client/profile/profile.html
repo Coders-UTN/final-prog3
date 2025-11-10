@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mi Perfil - Food Store</title>
+    <link rel="stylesheet" href="./profile.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="contenedor-principal">
+      <header class="navegacion-superior">
+        <div class="logo-app"><i class="fas fa-utensils"></i> Food Store</div>
+        <div class="acciones-usuario">
+          <a href="../cart/cart.html" class="enlace-nav carrito-link">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="contador-carrito" id="contador-carrito-header">0</span>
+          </a>
+
+          <a
+            href="/src/pages/admin/dashboard.html"
+            class="enlace-nav oculto"
+            id="link-admin"
+          >
+            <i class="fas fa-cog"></i> Panel Admin
+          </a>
+
+          <div id="info-usuario" class="info-usuario oculto">
+            <a href="/src/pages/client/orders/orders.html" class="enlace-nav"
+              ><i class="fa-solid fa-clipboard-check"></i> Mis Pedidos</a
+            >
+            <span class="texto-nav" id="nombre-usuario"></span>
+            <button class="btn-cerrar-sesion" id="btn-cerrar-sesion">
+              Cerrar Sesión
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main class="pagina-perfil">
+        <h1 class="pagina-perfil__titulo">Mi Perfil</h1>
+
+        <div class="pagina-perfil__layout-simple">
+          <div class="tarjeta-perfil">
+            <h3 class="tarjeta-perfil__titulo">Mis Datos</h3>
+
+            <ul class="info-lista">
+              <li class="info-linea">
+                <span class="info-linea__label">Nombre</span>
+                <span class="info-linea__valor cargando" id="nombre"
+                  >Cargando...</span
+                >
+              </li>
+              <li class="info-linea">
+                <span class="info-linea__label">Apellido</span>
+                <span class="info-linea__valor cargando" id="apellido"
+                  >Cargando...</span
+                >
+              </li>
+              <li class="info-linea">
+                <span class="info-linea__label">Email</span>
+                <span class="info-linea__valor cargando" id="email"
+                  >Cargando...</span
+                >
+              </li>
+              <li class="info-linea">
+                <span class="info-linea__label">Teléfono</span>
+                <span class="info-linea__valor cargando" id="telefono"
+                  >Cargando...</span
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="./profile.ts"></script>
+  </body>
+</html>

@@ -1,19 +1,19 @@
 export interface IProducto {
     id: number;
     nombre: string;
-    precio: number; 
-    categoriaid: number;
-    categoriaNombre: string,
-    stock : number,
-    descripcion : string,
-    imagen: string
+    descripcion: string;
+    imagen: string;
+    precio: number;
+    stock: number;
+    categoriaid: number; // El ID que viene del backend
+    categoriaNombre?: string; // El nombre que calculamos en el frontend
 }
 
 export interface ICreateProducto {
-    nombre : string,
-    precio : number,
-    categoriaid: number,
-    stock : number,
-    descripcion : string,
-    imagen: string
+    nombre: string;
+    descripcion: string;
+    imagen: string;
+    precio: number;
+    stock: number;
+    categoriaid: number;
 }

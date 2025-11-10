@@ -1,53 +1,55 @@
+// login.ts (CORREGIDO - Solo ADMIN/USUARIO)
+
 import { login } from "../../../utils/auth";
-import { saveUser } from "../../../utils/localStorage"; 
-import { navigateTo } from "../../../utils/navigate";     
+import { saveUser } from "../../../utils/localStorage";
+import { navigateTo } from "../../../utils/navigate";
+// --- Rutas de destino ---
+const ADMIN_PATH = "/src/pages/admin/products/products.html";
+const CLIENT_PATH = "/src/pages/store/home/home.html";
 
 // Espera a que el DOM esté cargado para asignar los eventos
-document.addEventListener('DOMContentLoaded', () => {
-    
-    // Busca:
+document.addEventListener("DOMContentLoaded", () => {
+  // Busca:
+  const loginForm = document.getElementById("login-form") as HTMLFormElement;
+  const emailInput = document.getElementById("email") as HTMLInputElement;
+  const passwordInput = document.getElementById("password") as HTMLInputElement;
+  const mensajeError = document.getElementById(
+    "error-message"
+  ) as HTMLParagraphElement;
 
-    // "login-form" 
-    const loginForm = document.getElementById('login-form') as HTMLFormElement;
-    
-    // inputs
-    const emailInput = document.getElementById('email') as HTMLInputElement;
-    const passwordInput = document.getElementById('password') as HTMLInputElement;
-    
-    // p error: 
-    const mensajeError = document.getElementById('error-message') as HTMLParagraphElement;
+  // Conexion formulario
+  loginForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-    // Conexion formulario
-    loginForm.addEventListener('submit', async (event) => {
-        
-        event.preventDefault();  //Evita que se recargue la pagina (no tocar)
+    mensajeError.textContent = "";
+    const credentials = {
+      email: emailInput.value,
+      password: passwordInput.value,
+    };
 
-        mensajeError.textContent = ''; //Limpia errores previos
-        const credentials = {
-            email: emailInput.value,
-            password: passwordInput.value
-        };
+    try {
+      const loggedInUser = await login(credentials);
 
-        try {
-            // Intenta hacer login
-            const loggedInUser = await login(credentials);
+      console.log("Inicio de sesión exitoso:", loggedInUser);
+      saveUser(loggedInUser);
 
-            // Si ta todo ok:
-            console.log("Inicio de sesión exitoso:", loggedInUser);
-            saveUser(loggedInUser); 
-            
-            mensajeError.textContent = `¡Bienvenido, ${loggedInUser.nombre}!`;
-            mensajeError.style.color = 'green';
+      mensajeError.textContent = `¡Bienvenido, ${loggedInUser.nombre}!`;
+      mensajeError.style.color = "green";
 
-            setTimeout(() => {
-                navigateTo('/client/home/home.html'); 
-            }, 1500); 
-
-        } catch (error: any) {
-            // si no: 
-            console.error("Error de login:", error);
-            mensajeError.textContent = error.message // "Error al iniciar sesión.";
-            mensajeError.style.color = 'red';
+      // --- LÓGICA DE REDIRECCIÓN POR ROL (SIMPLIFICADA) ---
+      setTimeout(() => {
+        // Compara directamente con el rol "ADMIN"
+        if (loggedInUser.rol === "ADMIN") {
+          navigateTo(ADMIN_PATH);
+        } else {
+          // Si es cualquier otro rol (asumimos USUARIO)
+          navigateTo(CLIENT_PATH);
         }
-    });
+      }, 1500);
+    } catch (error: any) {
+      console.error("Error de login:", error);
+      mensajeError.textContent = error.message;
+      mensajeError.style.color = "red";
+    }
+  });
 });
