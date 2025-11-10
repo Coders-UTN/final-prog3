@@ -70,9 +70,10 @@ export function clearCart(): void {
 }
 
 
-export async function finalizePurchase(): Promise<any> {
+export async function finalizePurchase(direccion: string): Promise<any> {
     const cart = getCartItems();
     const usuario = getUsuarioLogueado();
+    
 
     if (!usuario || !usuario.id) {
         alert("Error: Debes iniciar sesión para poder comprar.");
@@ -85,6 +86,7 @@ export async function finalizePurchase(): Promise<any> {
 
     const pedidoRequest: CreatePedido = {
         usuarioId: usuario.id,
+        direccionEnvio: direccion,
         items: cart.map((item) => ({
             productoId: item.producto.id,
             cantidad: item.cantidad,

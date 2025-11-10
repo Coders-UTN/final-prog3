@@ -1,10 +1,10 @@
 import type { ItemCarrito } from "../../../types/ICart";
 import type { IUser } from "../../../types/IUser";
 
-import * as CartService from "../../../services/cart.service"; 
+import * as CartService from "../../../services/cart.service";
 
 class CartApp {
-  carrito: ItemCarrito[] = []; 
+  carrito: ItemCarrito[] = [];
   modal: HTMLElement | null;
 
   btnFinalizar: HTMLButtonElement | null;
@@ -14,18 +14,34 @@ class CartApp {
   btnModalSeguir: HTMLButtonElement | null;
   btnModalVerPedidos: HTMLButtonElement | null;
   nombreUsuarioEl: HTMLElement | null;
+  inputDireccion: HTMLInputElement | null;
 
   constructor() {
     console.log("Cart App cargada.");
-    
+
     this.modal = document.getElementById("modal-compra");
     this.nombreUsuarioEl = document.getElementById("nombre-usuario");
-    this.btnFinalizar = document.getElementById("btn-finalizar") as HTMLButtonElement;
-    this.btnVaciar = document.getElementById("btn-vaciar-carrito") as HTMLButtonElement;
-    this.btnCerrarSesion = document.getElementById("btn-cerrar-sesion") as HTMLButtonElement;
-    this.btnModalCerrarX = document.querySelector("#modal-compra .modal-cerrar");
-    this.btnModalSeguir = document.getElementById("btn-seguir-comprando") as HTMLButtonElement;
-    this.btnModalVerPedidos = document.getElementById("btn-ver-pedidos") as HTMLButtonElement;    
+    this.btnFinalizar = document.getElementById(
+      "btn-finalizar"
+    ) as HTMLButtonElement;
+    this.btnVaciar = document.getElementById(
+      "btn-vaciar-carrito"
+    ) as HTMLButtonElement;
+    this.btnCerrarSesion = document.getElementById(
+      "btn-cerrar-sesion"
+    ) as HTMLButtonElement;
+    this.btnModalCerrarX = document.querySelector(
+      "#modal-compra .modal-cerrar"
+    );
+    this.btnModalSeguir = document.getElementById(
+      "btn-seguir-comprando"
+    ) as HTMLButtonElement;
+    this.btnModalVerPedidos = document.getElementById(
+      "btn-ver-pedidos"
+    ) as HTMLButtonElement;
+    this.inputDireccion = document.getElementById(
+      "input-direccion"
+    ) as HTMLInputElement;
   }
 
   // --- Inicialización ---
@@ -33,7 +49,7 @@ class CartApp {
     await this.verificarAutenticacion();
     this.cargarCarrito(); // Carga el estado inicial
     this.actualizarUI();
-    this.adjuntarEventos(); 
+    this.adjuntarEventos();
   }
 
   async verificarAutenticacion(): Promise<void> {
@@ -58,7 +74,7 @@ class CartApp {
   }
 
   cargarCarrito(): void {
-    this.carrito = CartService.getCartItems(); 
+    this.carrito = CartService.getCartItems();
     console.log("🛒 Carrito cargado:", this.carrito);
   }
 
@@ -77,16 +93,16 @@ class CartApp {
       listaCarrito.appendChild(this.crearCarritoVacio());
       return;
     }
-    
+
     const fragment = document.createDocumentFragment();
     this.carrito.forEach((item, index) => {
       // Pasamos el ID del producto, no el índice
-      const elementoItem = this.crearElementoItem(item); 
+      const elementoItem = this.crearElementoItem(item);
       fragment.appendChild(elementoItem);
     });
     listaCarrito.appendChild(fragment);
   }
-  
+
   crearCarritoVacio(): HTMLElement {
     const elemento = document.createElement("div");
     elemento.className = "carrito-vacio";
@@ -119,9 +135,13 @@ class CartApp {
         <div class="item-precio">$${item.producto.precio.toFixed(2)} c/u</div>
       </div>
       <div class="item-controles">
-        <button class="btn-cantidad btn-disminuir" ${item.cantidad <= 1 ? "disabled" : ""}>-</button>
+        <button class="btn-cantidad btn-disminuir" ${
+          item.cantidad <= 1 ? "disabled" : ""
+        }>-</button>
         <span class="cantidad-actual">${item.cantidad}</span>
-        <button class="btn-cantidad btn-aumentar" ${item.cantidad >= item.producto.stock ? "disabled" : ""}>+</button>
+        <button class="btn-cantidad btn-aumentar" ${
+          item.cantidad >= item.producto.stock ? "disabled" : ""
+        }>+</button>
       </div>
       <div class="item-subtotal">$${item.subtotal.toFixed(2)}</div>
       <button class="btn-eliminar-item" title="Eliminar producto">
@@ -135,25 +155,32 @@ class CartApp {
     const btnEliminar = elemento.querySelector(".btn-eliminar-item");
 
     // 3. Los listeners AHORA LLAMAN a los métodos de la clase
-    btnDisminuir?.addEventListener("click", () => this.disminuirCantidad(item.producto.id));
-    btnAumentar?.addEventListener("click", () => this.aumentarCantidad(item.producto.id, item.producto.stock));
-    btnEliminar?.addEventListener("click", () => this.eliminarItem(item.producto.id));
+    btnDisminuir?.addEventListener("click", () =>
+      this.disminuirCantidad(item.producto.id)
+    );
+    btnAumentar?.addEventListener("click", () =>
+      this.aumentarCantidad(item.producto.id, item.producto.stock)
+    );
+    btnEliminar?.addEventListener("click", () =>
+      this.eliminarItem(item.producto.id)
+    );
 
     return elemento;
   }
-  
+
   actualizarResumen(): void {
     const subtotal = this.carrito.reduce((sum, item) => sum + item.subtotal, 0);
-    const envio = subtotal > 5000 ? 0 : 500;
+    const envio = subtotal > 15000 ? 0 : 500;
     const total = subtotal + envio;
 
     const subtotalEl = document.getElementById("subtotal");
     const envioEl = document.getElementById("envio");
     const totalEl = document.getElementById("total");
 
-    if(subtotalEl) subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
-    if(envioEl) envioEl.textContent = envio === 0 ? "Gratis" : `$${envio.toFixed(2)}`;
-    if(totalEl) totalEl.textContent = `$${total.toFixed(2)}`;
+    if (subtotalEl) subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+    if (envioEl)
+      envioEl.textContent = envio === 0 ? "Gratis" : `$${envio.toFixed(2)}`;
+    if (totalEl) totalEl.textContent = `$${total.toFixed(2)}`;
   }
 
   actualizarBotonFinalizar(): void {
@@ -163,18 +190,24 @@ class CartApp {
   }
 
   aumentarCantidad(productoId: number, stock: number): void {
-    const item = this.carrito.find(i => i.producto.id === productoId);
+    const item = this.carrito.find((i) => i.producto.id === productoId);
     if (item && item.cantidad < stock) {
-        this.carrito = CartService.updateItemQuantity(productoId, item.cantidad + 1);
-        this.actualizarUI();
+      this.carrito = CartService.updateItemQuantity(
+        productoId,
+        item.cantidad + 1
+      );
+      this.actualizarUI();
     }
   }
 
   disminuirCantidad(productoId: number): void {
-    const item = this.carrito.find(i => i.producto.id === productoId);
-    if (item && item.cantidad > 0) { 
-        this.carrito = CartService.updateItemQuantity(productoId, item.cantidad - 1);
-        this.actualizarUI();
+    const item = this.carrito.find((i) => i.producto.id === productoId);
+    if (item && item.cantidad > 0) {
+      this.carrito = CartService.updateItemQuantity(
+        productoId,
+        item.cantidad - 1
+      );
+      this.actualizarUI();
     }
   }
 
@@ -189,48 +222,58 @@ class CartApp {
     if (this.carrito.length === 0) return;
     if (confirm("¿Estás seguro de que quieres vaciar todo el carrito?")) {
       CartService.clearCart();
-      this.carrito = []; 
+      this.carrito = [];
       this.actualizarUI();
     }
   }
 
   async finalizarCompra(): Promise<void> {
+
+    if (!this.inputDireccion || this.inputDireccion.value.trim() === "") {
+      alert("Por favor, ingresa una dirección de envío.");
+      this.inputDireccion?.focus();
+      return;
+    }
+    const direccionFinal = this.inputDireccion.value.trim();
     if (this.carrito.length === 0) return;
-    
-    if(this.btnFinalizar) this.btnFinalizar.disabled = true;
+
+    if (this.btnFinalizar) this.btnFinalizar.disabled = true;
 
     try {
-      const pedidoCreado = await CartService.finalizePurchase(); 
-      
+      console.log(direccionFinal);
+      const pedidoCreado = await CartService.finalizePurchase(direccionFinal);
+
       console.log("✅ Pedido creado:", pedidoCreado);
       this.mostrarModalConfirmacion(pedidoCreado);
-      
-      this.carrito = []; 
-      this.actualizarUI();
 
+      this.carrito = [];
+      this.actualizarUI();
     } catch (error) {
       console.error("❌ Error finalizando compra:", error);
-      
-      this.actualizarBotonFinalizar(); 
+
+      this.actualizarBotonFinalizar();
     }
   }
-  
 
   mostrarModalConfirmacion(pedido: any): void {
     if (!this.modal) return;
-    
+
     const numeroPedido = document.getElementById("numero-pedido");
     const totalPedido = document.getElementById("total-pedido");
     const fechaEntrega = document.getElementById("fecha-entrega");
 
-    if (numeroPedido) numeroPedido.textContent = `#${pedido.id?.toString().padStart(6, "0") || "000001"}`;
-    if (totalPedido) totalPedido.textContent = `$${pedido.total?.toFixed(2) || "0.00"}`;
+    if (numeroPedido)
+      numeroPedido.textContent = `#${
+        pedido.id?.toString().padStart(6, "0") || "000001"
+      }`;
+    if (totalPedido)
+      totalPedido.textContent = `$${pedido.total?.toFixed(2) || "0.00"}`;
     if (fechaEntrega) {
-        const fecha = new Date();
-        fecha.setDate(fecha.getDate() + 3); 
-        fechaEntrega.textContent = fecha.toLocaleDateString("es-ES");
+      const fecha = new Date();
+      fecha.setDate(fecha.getDate() + 3);
+      fechaEntrega.textContent = fecha.toLocaleDateString("es-ES");
     }
-    
+
     this.modal.style.display = "flex";
   }
 
@@ -252,7 +295,7 @@ class CartApp {
 
   cerrarSesion(): void {
     if (confirm("¿Estás seguro de que deseas cerrar sesión?")) {
-      CartService.clearCart(); 
+      CartService.clearCart();
       localStorage.removeItem("food_store_user");
       window.location.href = "/src/pages/auth/login/login.html";
     }
@@ -272,13 +315,14 @@ class CartApp {
     }
 
     this.btnModalCerrarX?.addEventListener("click", () => this.cerrarModal());
-    this.btnModalSeguir?.addEventListener("click", () => this.seguirComprando());
+    this.btnModalSeguir?.addEventListener("click", () =>
+      this.seguirComprando()
+    );
     this.btnModalVerPedidos?.addEventListener("click", () => this.verPedidos());
   }
 }
 
-
-document.addEventListener('DOMContentLoaded', () => {
-    const cartApp = new CartApp();
-    cartApp.inicializarApp();
+document.addEventListener("DOMContentLoaded", () => {
+  const cartApp = new CartApp();
+  cartApp.inicializarApp();
 });

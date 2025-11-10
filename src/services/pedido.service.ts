@@ -25,9 +25,6 @@ export const buscarPedidosCliente = async (idUsuario: number): Promise<IPedido[]
 };
 
 export const updateOrderStatus = async (id: number, estado: string): Promise<IPedido> => {
-    if (estado == CANCELADO) {
-        return await cancelOrder(id);
-    }
     const response = await fetch(`${API_BASE_URL_PEDIDOS}/${id}/estado`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },

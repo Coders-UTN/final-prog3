@@ -458,6 +458,48 @@ body {
     opacity: 0.9;
 }
 
+.tarjeta-resumen .grupo-formulario {
+    /* Estilo básico del contenedor del campo */
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem; /* Espacio antes del subtotal */
+    padding-top: 1rem;
+    border-top: 1px dashed #e2e8f0; /* Separador sutil del resto del resumen */
+}
+
+.tarjeta-resumen label {
+    /* Estilo para la etiqueta "Dirección de Envío" */
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #4a5568;
+    margin-bottom: 0.5rem;
+}
+
+.tarjeta-resumen #input-direccion {
+    /* Estilo principal del input de texto */
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #a0aec0;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #2d3748;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.tarjeta-resumen #input-direccion:focus {
+    /* Efecto al hacer clic en el input */
+    border-color: #ff6347; /* Color principal de la marca (rojo/naranja) */
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 99, 71, 0.2);
+}
+
+.tarjeta-resumen #input-direccion::placeholder {
+    /* Estilo del texto de placeholder */
+    color: #a0aec0;
+    font-style: italic;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .navegacion-superior {
