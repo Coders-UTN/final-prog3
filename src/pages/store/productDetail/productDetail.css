@@ -113,7 +113,7 @@ body {
 .imagen-grande {
     width: 100%;
     height: 400px;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 8px;
 }
 
@@ -261,8 +261,9 @@ body {
 }
 
 .grid-relacionados {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    display: flex;
+    flex: row;
+    justify-content: center;
     gap: 1.5rem;
 }
 
@@ -273,6 +274,7 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: all 0.3s;
     cursor: pointer;
+    width: 300px;
 }
 
 .tarjeta-relacionada:hover {
@@ -283,7 +285,7 @@ body {
 .imagen-relacionada {
     width: 100%;
     height: 150px;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .cuerpo-relacionada {
