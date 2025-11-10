@@ -1,0 +1,167 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+.contenedor-principal {
+  min-height: 100vh;
+}
+
+/* --- Header (Estilos que ya tienes) --- */
+.navegacion-superior {
+  background: #ff6347;
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logo-app {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.acciones-usuario {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.enlace-nav {
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+.enlace-nav:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.carrito-link {
+  position: relative;
+}
+
+.contador-carrito {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: #ff4757;
+  color: white;
+  border-radius: 50%;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.75rem;
+}
+
+.info-usuario {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.texto-nav {
+  font-weight: 500;
+}
+
+.btn-cerrar-sesion {
+  background-color: #f0ad4e;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.btn-cerrar-sesion:hover {
+  background: #b68643;
+}
+
+.oculto {
+  display: none !important;
+}
+
+/* --- Estilos de la Página de Perfil --- */
+.pagina-perfil {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.pagina-perfil__titulo {
+  font-size: 2.25rem;
+  color: #2d3748;
+  margin-bottom: 2rem;
+}
+
+/* Layout de una sola columna (centrado) */
+.pagina-perfil__layout-simple {
+  max-width: 600px; /* Más angosto para una sola tarjeta */
+  margin: 0 auto; /* Centrado */
+}
+
+.tarjeta-perfil {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  padding: 2rem;
+}
+
+.tarjeta-perfil__titulo {
+  font-size: 1.5rem;
+  color: #4a5568;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* --- NUEVOS ESTILOS: Lista de Datos --- */
+.info-lista {
+  list-style: none;
+}
+
+.info-linea {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.05rem;
+  padding: 1.25rem 0.5rem;
+  border-bottom: 1px solid #f1f1f1;
+}
+.info-linea:last-child {
+  border-bottom: none;
+}
+
+.info-linea__label {
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.info-linea__valor {
+  color: #2d3748;
+  font-weight: 500;
+}
+
+/* Texto 'cargando' de marcador */
+.info-linea__valor.cargando {
+  color: #a0aec0;
+  font-style: italic;
+  font-size: 0.95rem;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .navegacion-superior {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
