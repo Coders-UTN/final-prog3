@@ -1,23 +1,31 @@
-// vite.config.js
-import { resolve } from 'path'
-import { defineConfig } from 'vite'
+import { resolve } from 'path';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        // Esta es tu página principal (asumiendo que está en la raíz)
-        main: resolve(__dirname, 'index.html'),
+        // 1. el index es el home de productos
+        main: resolve(__dirname, 'src/pages/store/home/home.html'), 
 
-        // Aquí le decimos a Vite dónde están tus otras páginas HTML
-        // ✅ RUTA CORREGIDA (agregamos 'src/')
+        // auth
         login: resolve(__dirname, 'src/pages/auth/login/login.html'),
-        
-        // ✅ RUTA CORREGIDA (agregamos 'src/')
         register: resolve(__dirname, 'src/pages/auth/register/register.html'),
         
-        // ...puedes añadir más páginas aquí si las tienes
+        //home y cart
+        home: resolve(__dirname, 'src/pages/store/home/home.html'),
+        cart: resolve(__dirname, 'src/pages/store/cart/cart.html'),
+
+        productDetail: resolve(__dirname, 'src/pages/store/productDetail/productDetail.html'),
+        //paginas de cliente
+        orders: resolve(__dirname, 'src/pages/client/orders/orders.html'),
+        profile: resolve(__dirname, 'src/pages/client/profile/profile.html'),
+        //rutas de administrador
+        adminProducts: resolve(__dirname, 'src/pages/admin/products/products.html'),
+        adminCategories: resolve(__dirname, 'src/pages/admin/categories/categories.html'),
+        adminOrders: resolve(__dirname, 'src/pages/admin/orders/orders.html')
+       
       },
     },
   },
-})
+});
