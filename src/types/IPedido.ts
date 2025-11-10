@@ -17,6 +17,7 @@ export interface IPedido {
     detallePedidoDTO: IItemPedido[],
     usuarioId: number,
     usuarioNombre: string
+    direccionEnvio: string
 }
 
 export interface CreateItemPedido {
@@ -26,5 +27,6 @@ export interface CreateItemPedido {
 
 export interface CreatePedido {
     usuarioId: number;
+    direccionEnvio: string,
     items: CreateItemPedido[];
 }
