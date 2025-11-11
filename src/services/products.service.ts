@@ -1,3 +1,4 @@
+import type { IErrorResponse } from "../types/IErrorResponse";
 import type { IProducto, ICreateProducto } from "../types/IProduct";
 
 const API_BASE_URL_PRODUCTOS = "http://localhost:8080/api/productos";
@@ -21,7 +22,8 @@ export const crearProducto = async (
     body: JSON.stringify(producto),
   });
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    const errorBody: IErrorResponse = await response.json();
+    throw new Error(errorBody.mensaje);
   }
   return await response.json();
 };
@@ -37,7 +39,8 @@ export const modificarProducto = async (
     body: JSON.stringify(producto),
   });
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    const errorBody: IErrorResponse = await response.json();
+    throw new Error(errorBody.mensaje);
   }
   return await response.json();
 };
@@ -48,7 +51,8 @@ export const eliminarProducto = async (id: number): Promise<void> => {
     method: "DELETE",
   });
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    const errorBody: IErrorResponse = await response.json();
+    throw new Error(errorBody.mensaje);
   }
 };
 
@@ -56,7 +60,8 @@ export const eliminarProducto = async (id: number): Promise<void> => {
 export const buscarProductosPorCategoria = async (id: number): Promise<IProducto[]> => {
   const response = await fetch(`${API_BASE_URL_PRODUCTOS}/categoria/${id}`);
   if (!response.ok) {
-    throw new Error(`Error: ${response.status}`);
+    const errorBody: IErrorResponse = await response.json();
+    throw new Error(errorBody.mensaje);
   }
   return await response.json();
 };
@@ -65,7 +70,8 @@ export const buscarProductosPorCategoria = async (id: number): Promise<IProducto
 export const buscarProductoPorId = async (id: string): Promise<IProducto> => {
   const response = await fetch(`${API_BASE_URL_PRODUCTOS}/${id}`);
   if (!response.ok) {
-    throw new Error(`Error: ${response.status}`);
+    const errorBody: IErrorResponse = await response.json();
+    throw new Error(errorBody.mensaje);
   }
   return await response.json();
 };

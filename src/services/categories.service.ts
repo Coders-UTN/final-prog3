@@ -1,4 +1,5 @@
 import { type ICategoria, type ICreateCategoria } from "../types/ICategoria";
+import type { IErrorResponse } from "../types/IErrorResponse";
 const API_BASE_URL = "http://localhost:8080/api/categorias";
 
 export async function crearCategoria(
@@ -11,7 +12,8 @@ export async function crearCategoria(
   });
 
   if (!res.ok) {
-    throw new Error("No se pudo crear la categoria");
+    const errorBody: IErrorResponse = await res.json();
+    throw new Error(errorBody.mensaje);
   }
   return await res.json();
 }
@@ -20,7 +22,8 @@ export async function buscarTodasCategorias(): Promise<ICategoria[]> {
   const res = await fetch(API_BASE_URL);
 
   if (!res.ok) {
-    throw new Error("No se pudieron cargar las categoria");
+    const errorBody: IErrorResponse = await res.json();
+    throw new Error(errorBody.mensaje);
   }
   return await res.json();
 }
@@ -31,9 +34,8 @@ export async function buscarCategoriaId(id: number): Promise<ICategoria> {
   const res = await fetch(url);
 
   if (!res.ok) {
-    throw new Error(
-      `No se pudo encontrar la categoría con id ${id}. Status: ${res.status}`
-    );
+    const errorBody: IErrorResponse = await res.json();
+    throw new Error(errorBody.mensaje);
   }
 
   return await res.json();
@@ -47,9 +49,8 @@ export async function buscarCategoriaNombre(
   const res = await fetch(url);
 
   if (!res.ok) {
-    throw new Error(
-      `No se pudo encontrar la categoría con nombre ${nombre}. Status: ${res.status}`
-    );
+    const errorBody: IErrorResponse = await res.json();
+    throw new Error(errorBody.mensaje);
   }
 
   return await res.json();
@@ -68,7 +69,8 @@ export async function modificarCategoria(
   });
 
   if (!res.ok) {
-    throw new Error("No se pudo modificar la categoria");
+    const errorBody: IErrorResponse = await res.json();
+    throw new Error(errorBody.mensaje);
   }
   return await res.json();
 }
@@ -81,8 +83,7 @@ export async function eliminarCategoria(id: number) {
   });
 
   if (!res.ok) {
-    throw new Error(
-      `No se pudo eliminar la categoría con id ${id}. Status: ${res.status}`
-    );
+    const errorBody: IErrorResponse = await res.json();
+    throw new Error(errorBody.mensaje);
   }
 }
