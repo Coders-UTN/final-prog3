@@ -2,6 +2,8 @@ import type { ItemCarrito } from "../../../types/ICart";
 import type { IUser } from "../../../types/IUser";
 
 import * as CartService from "../../../services/cart.service";
+import { cerrarSesion, isLoggedIn } from "../../../utils/auth";
+import { navigateTo } from "../../../utils/navigate";
 
 class CartApp {
   carrito: ItemCarrito[] = [];
@@ -15,33 +17,26 @@ class CartApp {
   btnModalVerPedidos: HTMLButtonElement | null;
   nombreUsuarioEl: HTMLElement | null;
   inputDireccion: HTMLInputElement | null;
+  linkPedidos: HTMLAnchorElement | null;
+  linkProfile: HTMLAnchorElement | null;
+  botonCerrarSesion: HTMLButtonElement | null;
+  linkLogin: HTMLAnchorElement | null;
 
   constructor() {
-    console.log("Cart App cargada.");
-
     this.modal = document.getElementById("modal-compra");
     this.nombreUsuarioEl = document.getElementById("nombre-usuario");
-    this.btnFinalizar = document.getElementById(
-      "btn-finalizar"
-    ) as HTMLButtonElement;
-    this.btnVaciar = document.getElementById(
-      "btn-vaciar-carrito"
-    ) as HTMLButtonElement;
-    this.btnCerrarSesion = document.getElementById(
-      "btn-cerrar-sesion"
-    ) as HTMLButtonElement;
-    this.btnModalCerrarX = document.querySelector(
-      "#modal-compra .modal-cerrar"
-    );
-    this.btnModalSeguir = document.getElementById(
-      "btn-seguir-comprando"
-    ) as HTMLButtonElement;
-    this.btnModalVerPedidos = document.getElementById(
-      "btn-ver-pedidos"
-    ) as HTMLButtonElement;
-    this.inputDireccion = document.getElementById(
-      "input-direccion"
-    ) as HTMLInputElement;
+    this.btnFinalizar = document.getElementById("btn-finalizar") as HTMLButtonElement;
+    this.btnVaciar = document.getElementById("btn-vaciar-carrito") as HTMLButtonElement;
+    this.btnCerrarSesion = document.getElementById("btn-cerrar-sesion") as HTMLButtonElement;
+    this.btnModalCerrarX = document.querySelector("#modal-compra .modal-cerrar");
+    this.btnModalSeguir = document.getElementById("btn-seguir-comprando") as HTMLButtonElement;
+    this.btnModalVerPedidos = document.getElementById("btn-ver-pedidos") as HTMLButtonElement;
+    this.inputDireccion = document.getElementById("input-direccion") as HTMLInputElement;
+    this.linkPedidos = document.getElementById("link-pedidos") as HTMLAnchorElement;
+    this.linkProfile = document.getElementById("link-profile") as HTMLAnchorElement
+    this.botonCerrarSesion = document.getElementById("btn-cerrar-sesion") as HTMLButtonElement;
+    this.linkLogin = document.getElementById("link-login") as HTMLAnchorElement;
+
   }
 
   // --- Inicialización ---
@@ -53,13 +48,14 @@ class CartApp {
   }
 
   async verificarAutenticacion(): Promise<void> {
-    const usuario = this.getUsuarioLogueado();
-    if (!usuario) {
-      window.location.href = "/src/pages/store/home/home.html";
-      alert("Solo los usuarios logueados pueden hacer uso del carrito");
-      return;
+    const usuario = isLoggedIn();
+    if (usuario) {
+      this.actualizarNombreUsuario(usuario.nombre);
+      this.linkPedidos?.classList.remove('oculto');
+      this.linkProfile?.classList.remove('oculto');
+      this.botonCerrarSesion?.classList.remove('oculto');
+      this.linkLogin?.classList.add('oculto');
     }
-    this.actualizarNombreUsuario(usuario.nombre);
   }
 
   getUsuarioLogueado(): IUser | null {
@@ -228,6 +224,13 @@ class CartApp {
   }
 
   async finalizarCompra(): Promise<void> {
+    if (!isLoggedIn()) {
+      alert(
+        "Atencion! Para finalizar la compra deberá loguearse o registrarse"
+      );
+      navigateTo("/src/pages/auth/login/login.html");
+      return;
+    }
 
     if (!this.inputDireccion || this.inputDireccion.value.trim() === "") {
       alert("Por favor, ingresa una dirección de envío.");
@@ -240,7 +243,6 @@ class CartApp {
     if (this.btnFinalizar) this.btnFinalizar.disabled = true;
 
     try {
-      console.log(direccionFinal);
       const pedidoCreado = await CartService.finalizePurchase(direccionFinal);
 
       console.log("✅ Pedido creado:", pedidoCreado);
@@ -285,6 +287,7 @@ class CartApp {
 
   seguirComprando(): void {
     this.cerrarModal();
+    console.log("Redireccionando");
     window.location.href = "/src/pages/store/home/home.html";
   }
 
@@ -294,11 +297,7 @@ class CartApp {
   }
 
   cerrarSesion(): void {
-    if (confirm("¿Estás seguro de que deseas cerrar sesión?")) {
-      CartService.clearCart();
-      localStorage.removeItem("food_store_user");
-      window.location.href = "/src/pages/auth/login/login.html";
-    }
+    cerrarSesion()    
   }
 
   adjuntarEventos(): void {
@@ -315,9 +314,7 @@ class CartApp {
     }
 
     this.btnModalCerrarX?.addEventListener("click", () => this.cerrarModal());
-    this.btnModalSeguir?.addEventListener("click", () =>
-      this.seguirComprando()
-    );
+    this.btnModalSeguir?.addEventListener("click", () => this.seguirComprando());
     this.btnModalVerPedidos?.addEventListener("click", () => this.verPedidos());
   }
 }
