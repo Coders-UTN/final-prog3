@@ -49,7 +49,7 @@ class HomeApp {
   // --- Inicialización ---
   async inicializarApp(): Promise<void> {
     this.adjuntarEventos();
-    await this.verificarAutenticacion();
+    this.verificarAutenticacion();
     await this.cargarCategorias();
     await this.cargarProductos();
     this.actualizarContadorCarrito();
