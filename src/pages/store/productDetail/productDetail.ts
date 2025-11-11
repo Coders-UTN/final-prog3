@@ -6,6 +6,7 @@ import {
   buscarProductoPorId,
   buscarProductosPorCategoria,
 } from "../../../services/products.service";
+import { navigateTo } from "../../../utils/navigate";
 
 class ProductDetailApp {
   producto: IProducto | null = null;
@@ -18,6 +19,9 @@ class ProductDetailApp {
   btnModalSeguir: HTMLButtonElement | null;
   btnModalCarrito: HTMLButtonElement | null;
   nombreUsuarioEl: HTMLElement | null;
+  linkLogin: HTMLAnchorElement | null;
+  linkPedidos: HTMLAnchorElement | null;
+  linkProfile: HTMLAnchorElement | null;
 
   constructor() {
     console.log("Product Detail App cargada.");
@@ -34,6 +38,9 @@ class ProductDetailApp {
     this.btnModalCarrito = document.getElementById(
       "btn-modal-carrito"
     ) as HTMLButtonElement;
+        this.linkLogin = document.getElementById("link-login") as HTMLAnchorElement;
+    this.linkPedidos = document.getElementById("link-pedidos") as HTMLAnchorElement;
+    this.linkProfile = document.getElementById("link-profile") as HTMLAnchorElement
   }
 
   async inicializarApp(): Promise<void> {
@@ -45,11 +52,13 @@ class ProductDetailApp {
 
   async verificarAutenticacion(): Promise<void> {
     const usuario = this.getUsuarioLogueado();
-    if (!usuario) {
-      window.location.href = "/src/pages/auth/login/login.html";
-      return;
+    if (usuario) {
+      this.actualizarNombreUsuario(usuario.nombre);
+      this.linkPedidos?.classList.remove('oculto');
+      this.linkProfile?.classList.remove('oculto');
+      this.btnCerrarSesion?.classList.remove('oculto');
+      this.linkLogin?.classList.add('oculto');
     }
-    this.actualizarNombreUsuario(usuario.nombre);
   }
 
   getUsuarioLogueado(): IUser | null {
@@ -301,11 +310,11 @@ class ProductDetailApp {
   }
 
   volverAProductos(): void {
-    window.location.href = "../home/home.html";
+    navigateTo("/src/pages/store/home/home.html");
   }
 
   irAlCarrito(): void {
-    window.location.href = "../cart/cart.html";
+    navigateTo("src/pages/store/cart/cart.html");
   }
 
   mostrarModalConfirmacion(): void {
@@ -327,9 +336,8 @@ class ProductDetailApp {
       }
     });
 
-    this.btnModalSeguir?.addEventListener("click", () => this.cerrarModal());
+    this.btnModalSeguir?.addEventListener("click", () => this.volverAProductos());
     this.btnModalCarrito?.addEventListener("click", () => this.irAlCarrito());
-
     this.btnCerrarSesion?.addEventListener("click", () => cerrarSesion());
   }
 
