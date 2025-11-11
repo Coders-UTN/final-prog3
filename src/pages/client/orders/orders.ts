@@ -23,6 +23,7 @@ class ClientOrdersApp {
   modalListaProductos: HTMLUListElement | null;
   modalTotal: HTMLSpanElement | null;
   botonCerrarSesion: HTMLButtonElement | null;
+  contadorCarrito: HTMLElement | null;
 
   constructor() {
     console.log("Client Orders App cargada.");
@@ -37,6 +38,7 @@ class ClientOrdersApp {
     this.modalListaProductos = document.getElementById("modal-lista-productos") as HTMLUListElement;
     this.modalTotal = document.getElementById("modal-total") as HTMLSpanElement;
     this.botonCerrarSesion = document.getElementById("boton-cerrar-sesion") as HTMLButtonElement;
+    this.contadorCarrito = document.getElementById("contador-carrito-header");
   }
 
 
@@ -45,7 +47,7 @@ class ClientOrdersApp {
     if (!usuario) return; 
 
     this.adjuntarEventos();
-
+    this.actualizarContadorCarrito();
     try {
       const pedidos = await this.obtenerPedidos(usuario.id);
       this.renderizarPedidos(pedidos);
@@ -147,6 +149,14 @@ class ClientOrdersApp {
     this.listaPedidos.appendChild(fragment);
   }
 
+  actualizarContadorCarrito(): void {
+    if (!this.contadorCarrito) return;
+
+    const carrito = this.getCarrito();
+    const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+    this.contadorCarrito.textContent = totalItems.toString();
+  }
+
   abrirModalDetalle(pedido: IPedido): void {
     if (!this.modalTitulo || !this.modalFecha || !this.modalEstado || !this.modalTotal || !this.modalListaProductos || !this.modal) return;
 
@@ -170,6 +180,10 @@ class ClientOrdersApp {
       .join("");
 
     this.modal.showModal();
+  }
+    getCarrito(): any[] {
+    const carrito = localStorage.getItem("carrito");
+    return carrito ? JSON.parse(carrito) : [];
   }
 
   adjuntarEventos(): void {
