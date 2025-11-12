@@ -1,0 +1,36 @@
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+#app-dialog {
+  border: none;
+  border-radius: 10px;
+  padding: 1.5rem;
+  width: 500px;
+  text-align: center;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  animation: fadeIn 0.3s ease-in-out;
+  margin: auto;
+}
+
+.dialog-content button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+p{
+  padding: 20px 10px;
+}
+h2{
+  margin-top: 1rem;
+  padding: 10px 10px;
+}
+
+@keyframes fadeIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
