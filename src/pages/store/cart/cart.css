@@ -499,7 +499,9 @@ body {
     color: #a0aec0;
     font-style: italic;
 }
-
+.oculto{
+    display: none;
+}
 /* Responsive */
 @media (max-width: 768px) {
     .navegacion-superior {
