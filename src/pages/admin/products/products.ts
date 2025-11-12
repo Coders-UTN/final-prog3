@@ -3,6 +3,8 @@ import * as ProductoService from "../../../services/products.service";
 import type { ICategoria } from "../../../types/ICategoria";
 import type { ICreateProducto, IProducto } from "../../../types/IProduct";
 import { cerrarSesion } from "../../../utils/auth";
+import { getMessageError } from "../../../utils/getMessageError";
+import { mostrarModal } from "../../../utils/modal/mostrarModal";
 
 const IMAGEN_DEFAULT = "/assets/img/generic-food.png";
 
@@ -66,7 +68,7 @@ class ComponenteProductos {
       this.renderizarProductos();
     } catch (error) {
       console.error("Error al cargar los productos:", error);
-      alert("No se pudieron cargar los productos desde el servidor.");
+      mostrarModal({title: "No se pudieron cargar los productos", message: getMessageError(error), type: "error"})
     }
   }
 
@@ -224,7 +226,7 @@ class ComponenteProductos {
       nuevoStock < 0 ||
       isNaN(nuevaCategoriaId)
     ) {
-      alert("Por favor, ingrese valores válidos.");
+      mostrarModal({title: "Atencion!", message: "Ingresaste numeros inválidos", type: "warning"});
       return null;
     }
 
@@ -255,11 +257,7 @@ class ComponenteProductos {
       this.cerrarModal();
     } catch (error) {
       console.error("Error al guardar el producto:", error);
-      let mensajeError = "Error al guardar la categoría.";
-      if (error instanceof Error) {
-        mensajeError = error.message;
-      }
-      alert(mensajeError);
+      mostrarModal({title: "Error al guardar el producto", message: getMessageError(error), type: "error"})
     }
   }
 
@@ -273,11 +271,7 @@ class ComponenteProductos {
       this.cerrarModal();
     } catch (error) {
       console.error("Error al guardar la edición del producto:", error);
-      let mensajeError = "Error al intentar actualizar el producto.";
-      if (error instanceof Error) {
-        mensajeError = error.message;
-      }
-      alert(mensajeError);
+      mostrarModal({title: "Error al editar el producto", message: getMessageError(error), type: "error"});
     }
   }
 
@@ -294,11 +288,7 @@ class ComponenteProductos {
         await this.cargarProductos();
       } catch (error) {
         console.error("Error al eliminar el producto:", error);
-        let mensajeError = "Error al intentar actualizar el producto.";
-        if (error instanceof Error) {
-          mensajeError = error.message;
-        }
-        alert(mensajeError);
+        mostrarModal({title: "Error al eliminar el producto", message: getMessageError(error), type: "error"});
       }
     }
   }

@@ -1,6 +1,8 @@
 import { type ICategoria } from "../../../types/ICategoria";
 import * as CategoriaService from "../../../services/categories.service";
 import { cerrarSesion } from "../../../utils/auth";
+import { mostrarModal } from "../../../utils/modal/mostrarModal";
+import { getMessageError } from "../../../utils/getMessageError";
 
 const IMAGEN_DEFAULT = "/assets/img/generic-category.png";
 
@@ -10,7 +12,7 @@ class ComponenteCategorias {
   formulario: HTMLFormElement | null;
   tablaCuerpo: HTMLElement | null;
   idCategoriaEnEdicion: number | null = null;
-  botonCerrarSesion : HTMLButtonElement | null;
+  botonCerrarSesion: HTMLButtonElement | null;
 
   constructor() {
     console.log("Componente de Categorías cargado.");
@@ -19,8 +21,9 @@ class ComponenteCategorias {
       "formulario-categoria"
     ) as HTMLFormElement;
     this.tablaCuerpo = document.querySelector(".tarjeta table tbody");
-    this.botonCerrarSesion = document.getElementById('boton-cerrar-sesion') as HTMLButtonElement;
-    
+    this.botonCerrarSesion = document.getElementById(
+      "boton-cerrar-sesion"
+    ) as HTMLButtonElement;
   }
 
   public async inicializar() {
@@ -34,8 +37,7 @@ class ComponenteCategorias {
       this.categorias = await CategoriaService.buscarTodasCategorias();
       this.renderizarCategorias();
     } catch (error) {
-      console.error("Error al cargar las categorías:", error);
-      alert("No se pudieron cargar las categorías desde el servidor.");
+      mostrarModal({ title: "Error al cargar las categorias", message: getMessageError(error), type: "error" });
     }
   }
 
@@ -133,16 +135,14 @@ class ComponenteCategorias {
 
     try {
       await CategoriaService.eliminarCategoria(idCategoria);
-      alert("Categoría eliminada.");
+      mostrarModal({
+        title: "Operacion exitosa",
+        message: "Categoria eliminada satisfactoriamente",
+        type: "success",
+      });
       await this.cargarCategorias();
     } catch (error) {
-      console.error("Error al eliminar la categoría:", error);
-
-      let mensajeError = "No se pudo eliminar la categoría.";
-      if (error instanceof Error) {
-        mensajeError = error.message;
-      }
-      alert(mensajeError);
+      mostrarModal({ title: "Error al eliminar la categoria", message: getMessageError(error), type: "error" });
     }
   }
 
@@ -164,7 +164,11 @@ class ComponenteCategorias {
       if (this.idCategoriaEnEdicion === null) {
         console.log("Creando nueva categoría...");
         await CategoriaService.crearCategoria(datosForm);
-        alert("Categoría creada exitosamente.");
+        mostrarModal({
+          title: "Operacion exitosa",
+          message: "Se creo la categoria satisfactoriamente",
+          type: "success",
+        });
       } else {
         console.log(
           `Actualizando categoría ID: ${this.idCategoriaEnEdicion}...`
@@ -173,22 +177,21 @@ class ComponenteCategorias {
           this.idCategoriaEnEdicion,
           datosForm
         );
-        alert("Categoría actualizada exitosamente.");
+        mostrarModal({
+          title: "Operacion exitosa",
+          message: "Se modifico la categoria satisfactoriamente",
+          type: "info",
+        });
       }
 
       this.cerrarModal();
       await this.cargarCategorias();
     } catch (error) {
       console.error("Error al guardar la categoría:", error);
-
-      let mensajeError = "Error al guardar la categoría.";
-      if (error instanceof Error) {
-        mensajeError = error.message;
-      }
-      alert(mensajeError);
+      mostrarModal({ title: "Error al guardar la categoria", message: getMessageError(error), type: "error" });
     }
   }
-    cerrarSesion(): void {
+  cerrarSesion(): void {
     if (confirm("¿Estás seguro de que deseas cerrar sesión?")) {
       localStorage.removeItem("food_store_user");
       window.location.href = "../../login/login.html";
@@ -209,7 +212,7 @@ class ComponenteCategorias {
     const closeBtn = document.querySelector(".modal-cerrar");
     const cancelBtn = document.querySelector(".btn-cancelar");
 
-    this.botonCerrarSesion?.addEventListener("click", () => cerrarSesion())
+    this.botonCerrarSesion?.addEventListener("click", () => cerrarSesion());
     cancelBtn?.addEventListener("click", () => this.cerrarModal());
     closeBtn?.addEventListener("click", () => this.cerrarModal());
   }

@@ -1,6 +1,8 @@
 import * as OrderService from "../../../services/pedido.service";
 import type { IEstadoPedido, IPedido } from "../../../types/IPedido";
 import { cerrarSesion, isAdminUser } from "../../../utils/auth";
+import { getMessageError } from "../../../utils/getMessageError";
+import { mostrarModal } from "../../../utils/modal/mostrarModal";
 import { navigateTo } from "../../../utils/navigate";
 const CANCELADO: IEstadoPedido = "CANCELADO";
 
@@ -62,13 +64,7 @@ class ComponenteOrders {
       this.orders = await OrderService.findAllOrders();
       this.renderizarPedidos();
     } catch (error) {
-      console.error("Error al cargar los pedidos:", error);
-
-      let mensajeError = "No se pudieron cargar los pedidos desde el servidor.";
-      if (error instanceof Error) {
-        mensajeError += `\n\nError: ${error.message}`;
-      }
-      alert(mensajeError);
+      mostrarModal({title: "Error al cargar los pedidos", message: getMessageError(error), type: "error"})
     }
   }
 
@@ -160,12 +156,7 @@ class ComponenteOrders {
       await this.cargarPedidos();
       this.cerrarModal();
     } catch (error) {
-      console.error("Error al actualizar el estado:", error);
-      let mensajeError = "Error al intentar actualizar el estado.";
-      if (error instanceof Error) {
-        mensajeError = error.message;
-      }
-      alert(mensajeError);
+      mostrarModal({ title: "Error", message: getMessageError(error), type: "error" });
     } finally {
       if (this.btnGuardarEstado) {
         this.btnGuardarEstado.disabled = false;
