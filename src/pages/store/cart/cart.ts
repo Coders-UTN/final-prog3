@@ -2,8 +2,10 @@ import type { ItemCarrito } from "../../../types/ICart";
 import type { IUser } from "../../../types/IUser";
 
 import * as CartService from "../../../services/cart.service";
-import { cerrarSesion, isLoggedIn } from "../../../utils/auth";
+import { cerrarSesion, isAdminUser, isLoggedIn } from "../../../utils/auth";
 import { navigateTo } from "../../../utils/navigate";
+import { mostrarModal } from "../../../utils/modal/mostrarModal";
+import { getMessageError } from "../../../utils/getMessageError";
 
 class CartApp {
   carrito: ItemCarrito[] = [];
@@ -25,18 +27,37 @@ class CartApp {
   constructor() {
     this.modal = document.getElementById("modal-compra");
     this.nombreUsuarioEl = document.getElementById("nombre-usuario");
-    this.btnFinalizar = document.getElementById("btn-finalizar") as HTMLButtonElement;
-    this.btnVaciar = document.getElementById("btn-vaciar-carrito") as HTMLButtonElement;
-    this.btnCerrarSesion = document.getElementById("btn-cerrar-sesion") as HTMLButtonElement;
-    this.btnModalCerrarX = document.querySelector("#modal-compra .modal-cerrar");
-    this.btnModalSeguir = document.getElementById("btn-seguir-comprando") as HTMLButtonElement;
-    this.btnModalVerPedidos = document.getElementById("btn-ver-pedidos") as HTMLButtonElement;
-    this.inputDireccion = document.getElementById("input-direccion") as HTMLInputElement;
-    this.linkPedidos = document.getElementById("link-pedidos") as HTMLAnchorElement;
-    this.linkProfile = document.getElementById("link-profile") as HTMLAnchorElement
-    this.botonCerrarSesion = document.getElementById("btn-cerrar-sesion") as HTMLButtonElement;
+    this.btnFinalizar = document.getElementById(
+      "btn-finalizar"
+    ) as HTMLButtonElement;
+    this.btnVaciar = document.getElementById(
+      "btn-vaciar-carrito"
+    ) as HTMLButtonElement;
+    this.btnCerrarSesion = document.getElementById(
+      "btn-cerrar-sesion"
+    ) as HTMLButtonElement;
+    this.btnModalCerrarX = document.querySelector(
+      "#modal-compra .modal-cerrar"
+    );
+    this.btnModalSeguir = document.getElementById(
+      "btn-seguir-comprando"
+    ) as HTMLButtonElement;
+    this.btnModalVerPedidos = document.getElementById(
+      "btn-ver-pedidos"
+    ) as HTMLButtonElement;
+    this.inputDireccion = document.getElementById(
+      "input-direccion"
+    ) as HTMLInputElement;
+    this.linkPedidos = document.getElementById(
+      "link-pedidos"
+    ) as HTMLAnchorElement;
+    this.linkProfile = document.getElementById(
+      "link-profile"
+    ) as HTMLAnchorElement;
+    this.botonCerrarSesion = document.getElementById(
+      "btn-cerrar-sesion"
+    ) as HTMLButtonElement;
     this.linkLogin = document.getElementById("link-login") as HTMLAnchorElement;
-
   }
 
   // --- Inicialización ---
@@ -51,10 +72,10 @@ class CartApp {
     const usuario = isLoggedIn();
     if (usuario) {
       this.actualizarNombreUsuario(usuario.nombre);
-      this.linkPedidos?.classList.remove('oculto');
-      this.linkProfile?.classList.remove('oculto');
-      this.botonCerrarSesion?.classList.remove('oculto');
-      this.linkLogin?.classList.add('oculto');
+      this.linkPedidos?.classList.remove("oculto");
+      this.linkProfile?.classList.remove("oculto");
+      this.botonCerrarSesion?.classList.remove("oculto");
+      this.linkLogin?.classList.add("oculto");
     }
   }
 
@@ -224,17 +245,33 @@ class CartApp {
   }
 
   async finalizarCompra(): Promise<void> {
-    if (!isLoggedIn()) {
-      alert(
-        "Atencion! Para finalizar la compra deberá loguearse o registrarse"
-      );
-      navigateTo("/src/pages/auth/login/login.html");
+    if (!this.inputDireccion || this.inputDireccion.value.trim() === "") {
+      mostrarModal({
+        title: "Atencion",
+        message: "Ingresa una direccion de envio",
+        type: "warning",
+      });
+      this.inputDireccion?.focus();
       return;
     }
-
-    if (!this.inputDireccion || this.inputDireccion.value.trim() === "") {
-      alert("Por favor, ingresa una dirección de envío.");
-      this.inputDireccion?.focus();
+    if (isAdminUser()) {
+      mostrarModal({
+        title: "Error!",
+        message: "Los administradores no pueden hacer compras",
+        type: "info",
+      });
+      return;
+    }
+    if (!isLoggedIn()) {
+      const modal = mostrarModal({
+        title: "Atencion",
+        message: "Para continuar con la compra debes loguearte o registrarte",
+        type: "warning",
+      });
+      //espera que se cierre el modal para redirigir
+      modal.addEventListener("close", () => {
+        navigateTo("/src/pages/auth/login/login.html");
+      });
       return;
     }
     const direccionFinal = this.inputDireccion.value.trim();
@@ -252,7 +289,11 @@ class CartApp {
       this.actualizarUI();
     } catch (error) {
       console.error("❌ Error finalizando compra:", error);
-
+      mostrarModal({
+        title: "Error al finalizar la compra",
+        message: getMessageError(error),
+        type: "error",
+      });
       this.actualizarBotonFinalizar();
     }
   }
@@ -297,7 +338,7 @@ class CartApp {
   }
 
   cerrarSesion(): void {
-    cerrarSesion()    
+    cerrarSesion();
   }
 
   adjuntarEventos(): void {
@@ -314,7 +355,9 @@ class CartApp {
     }
 
     this.btnModalCerrarX?.addEventListener("click", () => this.cerrarModal());
-    this.btnModalSeguir?.addEventListener("click", () => this.seguirComprando());
+    this.btnModalSeguir?.addEventListener("click", () =>
+      this.seguirComprando()
+    );
     this.btnModalVerPedidos?.addEventListener("click", () => this.verPedidos());
   }
 }
