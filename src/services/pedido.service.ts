@@ -55,3 +55,30 @@ export const cancelOrder = async (id: number): Promise<IPedido> => {
   }
   return await response.json();
 };
+
+export const getTotalPedidosMes = async () => {
+  const res = await fetch(`${API_BASE_URL_PEDIDOS}/stats/total-pedidos`)
+  if (!res.ok) {
+    const errorBody: IErrorResponse = await res.json();
+    throw new Error(errorBody.mensaje)
+  }
+  return  await res.json();
+}
+
+export const getTotalVentasMes = async () => {
+  const res = await fetch(`${API_BASE_URL_PEDIDOS}/stats/total-ventas`)
+  if (!res.ok) {
+    const errorBody: IErrorResponse = await res.json();
+    throw new Error(errorBody.mensaje)
+  }
+  return  await res.json();
+}
+
+export const getUltimosPedidos = async (): Promise<IPedido[]> => {
+  const res = await fetch(`${API_BASE_URL_PEDIDOS}/ultimos`)
+  if (!res.ok) {
+    const errorBody: IErrorResponse = await res.json();
+    throw new Error(errorBody.mensaje)
+  }
+  return  await res.json();
+}

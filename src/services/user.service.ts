@@ -23,3 +23,12 @@ export async function buscarUsuarioPorId(id: string) {
   }
     return await res.json();
 }
+
+export async function getTotalClientes(): Promise<number> {
+  const res = await fetch(`${API_BASE_URL}/stats/total-clientes`)
+  if (!res.ok){
+    const errorBody: IErrorResponse = await res.json()
+    throw new Error(errorBody.mensaje)
+  }
+  return await res.json()
+}

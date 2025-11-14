@@ -75,3 +75,12 @@ export const buscarProductoPorId = async (id: string): Promise<IProducto> => {
   }
   return await response.json();
 };
+
+export const getTotalProductos = async (): Promise<number> => {
+  const response = await fetch(`${API_BASE_URL_PRODUCTOS}/stats/total`);
+  if (!response.ok) {
+    const errorBody: IErrorResponse = await response.json();
+    throw new Error(errorBody.mensaje);
+  }
+  return await response.json();
+};
