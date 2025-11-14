@@ -57,7 +57,7 @@ class AdminApp {
       console.log(ventas);
       // actualizar iu
       this.actualizarStat(this.totalClientes, clientes);
-      this.actualizarStat(this.totalVentas, ventas);
+      this.actualizarStat(this.totalVentas, `$ ${ventas.toFixed(2)}`);
       this.actualizarStat(this.totalPedidos, pedidos);
       this.actualizarStat(this.totalProductos, productos);
     } catch (error) {
